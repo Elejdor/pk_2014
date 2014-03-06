@@ -1,4 +1,4 @@
-package tydzien_02;
+package mainPackage;
 import java.io.*;
 
 public class MainClass {
