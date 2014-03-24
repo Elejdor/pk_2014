@@ -7,7 +7,7 @@
 import java.util.Comparator;
 import java.util.Date;
 
-class Mandat implements Comparable<Mandat>, Comparator<Mandat> 
+class Mandat implements Comparable<Mandat>, Comparator<Mandat>, ISimpleData
 {
 	private String nazwiskoKierowcy;
 	private double wysokoscMandatu;
@@ -17,6 +17,25 @@ class Mandat implements Comparable<Mandat>, Comparator<Mandat>
 	private double wplaconoKwote = 0;
 	
 	private Date dataZdarzenia;
+	
+	public String toCSV()
+	{		
+		return nazwiskoKierowcy + ","
+				+ wysokoscMandatu + ","
+				+ punktyKarne + ","
+				+ pesel + ","
+				+ wplaconoKwote;
+	}
+	
+	public void getCSV(String data)
+	{
+		String []tab = data.split("[,]");
+		nazwiskoKierowcy = tab[0];
+		wysokoscMandatu = Double.parseDouble(tab[1]);
+		punktyKarne = Integer.parseInt(tab[2]);
+		pesel = tab[3];
+		wplaconoKwote = Double.parseDouble(tab[4]);
+	}
 	
 	public Mandat(String nazwisko, int wysokoscMandatu, int punktyKarne, String pesel)
 	{

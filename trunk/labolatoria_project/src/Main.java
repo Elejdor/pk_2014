@@ -4,6 +4,7 @@
  * Filip Wróbel
  * grupa 7
  */
+import java.io.*;
 import java.util.Arrays;
 
 public class Main {
@@ -34,6 +35,8 @@ public class Main {
 		
 		//wype³nienie tabliby obiektami przy u¿yciu statycznej metody
 		wstawMandat(policjant);
+		SaveCSV(policjant);
+		
 		
 		//pokazanie nieposrotowanej tablicy
 		pokazMandaty(policjant);
@@ -56,6 +59,20 @@ public class Main {
 		
 		//konwersja typu Obiekt utworzonego z obiektu typu Mandat spowrotem na tym Mandat
 		Mandat przywroconyMandat = (Mandat)nowyObiekt;
+		
+		
 	}
+	
+	static public void SaveCSV(ISimpleData[] tab)
+	{
+		String textBuffer = "";
+		
+		for (ISimpleData element : tab) {
+			textBuffer += element.toCSV() + ",";
+		}
 
+		DataManager.SaveTextFile("mandaty.csv", textBuffer);
+	}
+	
+	
 }
