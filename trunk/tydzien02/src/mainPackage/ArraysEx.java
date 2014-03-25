@@ -1,19 +1,20 @@
 package mainPackage;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Random;
 
 public class ArraysEx {
 	public static void FillTabsAndPrint(int size, int min, int max)
 	{
 		int tabRand[] = new int[size];
-		Random randomGenerator = new Random();
+		//Random randomGenerator = new Random();
+		SecureRandom randomGenerator = new SecureRandom();
+		
 		for (int i = 0; i < tabRand.length; i++)
 		{
 			tabRand[i] = randomGenerator.nextInt(max-min + 1) + min;
 		}
-		
-		
+				
 		IOStream.stdout.printf("Random values array: ");
 		PrintIntArray(tabRand);		
 		SortTest(tabRand);
@@ -56,13 +57,14 @@ public class ArraysEx {
 		BubbleSort(tab, false);
 	}
 	
+	
 	public static void BubbleSort(int[] tab, Boolean reverse)
 	{
 		for (int i = 0; i < tab.length; i++)
 		{
 			for (int j = 0; j < tab.length-i-1; j++)
 			{
-				if ((tab[j] > tab[j+1] && !reverse) || (tab[j] < tab[j+1] && reverse))
+				if ((tab[j] > tab[j+1]))
 				{
 					int swap = tab[j];
 					tab[j] = tab[j+1];

@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
@@ -10,25 +11,20 @@ interface ISimpleData
 
 class DataManager
 {
+	static Charset encoding = StandardCharsets.UTF_8;
+	
 	private DataManager() {}
+	
 	static void SaveTextFile(String fileName, String text) throws IOException
 	{
-		Path path = Paths.get(fileName);
-		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8))
-		{
-			writer.write(text);			
-		}
+		BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName), encoding);
+		writer.write(text);
 	}
 	
 	static String LoadTextFile(String fileName) throws IOException
 	{
-		String output = "";
-		Path path = Paths.get(fileName);
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8))
-		{
-			output = reader.readLine();
-		}
-		return output;
+		BufferedReader reader = Files.newBufferedReader(Paths.get(fileName), encoding);
+		return reader.readLine();
 	}
 	
 }
