@@ -133,7 +133,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		ListSelectionListener actionIndexChanged = new ListSelectionListener() 
 		{
 			public void valueChanged(ListSelectionEvent arg0) 
-			{
+			{ 
 				if(MyCinemaSellerView.sellerView.users_userList.getSelectedIndex() != -1)
 				{
 					MyCinemaSellerView.sellerView.users_login.setText(MyCinemaSellerView.sellerView.userList.get(MyCinemaSellerView.sellerView.users_userList.getSelectedIndex()).user_login);

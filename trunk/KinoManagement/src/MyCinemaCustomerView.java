@@ -50,10 +50,11 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	public JList<String> shows_showsList;
 	public ArrayList<ShowsRow> showsList;
 	public ArrayList<Seat> seats = new ArrayList<Seat>();
+	public ArrayList<TicketsRow> tickets = new ArrayList<TicketsRow>();
 	
 	public MyCinemaCustomerView(MyCinemaController myCinemaController)
 	{
-		this.myCinemaController = myCinemaController;
+		this.myCinemaController = myCinemaController;		
 		
 		JTabbedPane jTabbedPane = new JTabbedPane();
 		Rectangle tabRectangle = this.getBounds();
@@ -86,22 +87,26 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		tabtickets.add(shows_scrollList);
 		this.showsList = this.myCinemaController.GetShowsList();
 		this.shows_showsList.setListData(MyCinemaController.ShowsRowListToArray(this.showsList));
+		createSeats(7, 5, 420, 50, 50, 30, 2);
+		
 		ListSelectionListener actionIndexChanged = new ListSelectionListener() 
 		{
 			public void valueChanged(ListSelectionEvent arg0) 
 			{
-				if(MyCinemaSellerView.sellerView.users_userList.getSelectedIndex() != -1)
+				if(shows_showsList.getSelectedIndex() != -1)
 				{
+					tickets = myCinemaController.GetTicketsList(showsList.get(shows_showsList.getSelectedIndex()).show_id);
 					
+					fillSeatsForShow();
+					System.out.println("Filling");
 				} else{
-					
+					System.out.println("Wut");
 				}
 			}
 		};
-		this.shows_showsList.addListSelectionListener(actionIndexChanged);
+		this.shows_showsList.addListSelectionListener(actionIndexChanged);	
 		
-		createSeats(7, 5, 420, 50, 50, 30, 2);
-		fillSeatsForShow();
+		
 	}
 	private void initializeTabShows(JTabbedPane jTabbedPane)
 	{
@@ -120,10 +125,18 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	
 	private void fillSeatsForShow()
 	{
+
 		for (int i = 0; i < seats.size(); i++) {
-			if (seats.get(i).booked == false)
-			{
-				seats.get(i).button.setBackground(Color.red);
+			seats.get(i).button.setBackground(Color.green);
+
+			for (int j = 0; j < tickets.size(); j++) {
+				System.out.println(tickets.get(j).ticket_show_id);
+				if (tickets.get(j).ticket_seat_number == i)
+				{
+					//TODO if (tickets.get(j).user_id == loggedin) Color = blue;
+					seats.get(i).button.setBackground(Color.red);
+				}
+
 			}
 		}
 	}
