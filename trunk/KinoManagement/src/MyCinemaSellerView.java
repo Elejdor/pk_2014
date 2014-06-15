@@ -918,6 +918,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		{
 			public void valueChanged(ListSelectionEvent arg0) 
 			{
+				//update
 				if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
 				{
 					MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
@@ -1009,7 +1010,48 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		this.tickets_buttonUpdate = new JButton("Update");
 		this.tickets_buttonUpdate.setBounds( 550, 280, 90,20);
 		this.tabTickets.add(tickets_buttonUpdate);
-		
+		ActionListener actionTicketUpdate = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				try
+				{
+					TicketsRow tmpRow = MyCinemaSellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex());
+					tmpRow.ticket_user_id = Integer.parseInt(MyCinemaSellerView.sellerView.tickets_user_id.getText());
+					int oldSeatNumber = tmpRow.ticket_seat_number;
+					tmpRow.ticket_seat_number = Integer.parseInt(MyCinemaSellerView.sellerView.tickets_seat_number.getText());
+					tmpRow.ticket_state = String.valueOf(MyCinemaSellerView.sellerView.tickets_state.getSelectedItem());
+					
+					int result = MyCinemaSellerView.sellerView.myCinemaController.UpdateTicket(tmpRow, oldSeatNumber);
+					if(result == 0)
+					{
+						//update
+						if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
+						{
+							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
+							MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+						}
+						else{
+							if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
+							{
+								MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+								MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+							}else{
+								MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+								MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+							}
+						}
+					}else{
+						JOptionPane.showMessageDialog(null, "Pick diffrent seat number");
+					}
+				}
+				catch(NumberFormatException en)
+				{
+					JOptionPane.showMessageDialog(null,"Fill in fields with apropriate numbers.");
+				}
+			}
+		};
+		this.tickets_buttonUpdate.addActionListener(actionTicketUpdate);
 	}
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{
