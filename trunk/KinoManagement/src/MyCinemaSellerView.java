@@ -1014,6 +1014,21 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				if(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Pick ticket to update");
+					return;
+				}
+				if(MyCinemaSellerView.sellerView.tickets_user_id.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Fill in the user id field.");
+					return;
+				}
+				if(MyCinemaSellerView.sellerView.tickets_seat_number.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Fill in the seat number field.");
+					return;
+				}
 				try
 				{
 					TicketsRow tmpRow = MyCinemaSellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex());
