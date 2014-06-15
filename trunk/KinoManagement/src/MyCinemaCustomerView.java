@@ -130,21 +130,18 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 			seats.get(i).button.setBackground(Color.green);
 			seats.get(i).button.setEnabled(true);
 			
-			ActionListener[] als = seats.get(i).button.getActionListeners();
-			for (int a = 0; a < als.length; a++) {
-				seats.get(i).button.removeActionListener(als[a]);
-			}
+			ClearActionListeners(seats.get(i).button);
 			
-			if (als.length > 0)
-				seats.get(i).button.removeActionListener(als[0]);
+			seats.get(i).button.addActionListener(GetListenerForRegular());
 			
 			for (int j = 0; j < tickets.size(); j++) 
 			{
 				if (tickets.get(j).ticket_seat_number == i)
 				{
+					ClearActionListeners(seats.get(i).button);
+					
 					if (myCinemaController.logged_user_id == tickets.get(j).ticket_user_id)
 					{
-						System.out.println(tickets.get(j).ticket_state);
 						if (tickets.get(j).ticket_state.equals("BOUGHT"))
 						{
 							seats.get(i).button.setBackground(Color.yellow);	
@@ -164,6 +161,14 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 				}
 
 			}
+		}
+	}
+	
+	private void ClearActionListeners(JButton button)
+	{
+		ActionListener[] als = button.getActionListeners();
+		for (int a = 0; a < als.length; a++) {
+			button.removeActionListener(als[a]);
 		}
 	}
 	
@@ -194,15 +199,12 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 					if (selectedValue.equals(possibleValues[0]))
 					{
 						btn.setBackground(Color.yellow);
-						System.out.println("Ticket bought " + Integer.toString(tmpTicket.ticket_id));
 						myCinemaController.UpdateTicket(tmpTicket.ticket_id, "BOUGHT");
 					}
 					else if (selectedValue.equals(possibleValues[1]))
 					{
 						btn.setBackground(Color.green);
-						System.out.println("Reserved ticket deleted " + Integer.toString(tmpTicket.ticket_id));
-						myCinemaController.DeleteTicket(tmpTicket.ticket_id);
-						
+						myCinemaController.DeleteTicket(tmpTicket.ticket_id);						
 					}
 				}
 				fillSeatsForShow();
@@ -252,22 +254,23 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		return action;
 	}
 	
-	private ActionListener GetListenerForFree()
+	private ActionListener GetListenerForRegular()
 	{
 		ActionListener action = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) {
-				Object[] possibleValues = { "Return ticket"};
-				Object selectedValue = JOptionPane.showInputDialog(null,
-					"Choose one", "Input",
-					JOptionPane.INFORMATION_MESSAGE, null,
-					possibleValues, possibleValues[0]);
-				JButton btn = (JButton)e.getSource();
-				
-				int seatNumber = Integer.parseInt(btn.getText());
-				
+				JButton btn = (JButton)e.getSource();				
+				int seatNumber = Integer.parseInt(btn.getText());				
 				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
-				//TODO: add ticket (sql)
+				
+				TicketsRow ticketBuilder = new TicketsRow();
+				ticketBuilder.ticket_seat_number = seatNumber;
+				ticketBuilder.ticket_show_id = showId;
+				ticketBuilder.ticket_state = "RESERVED";
+				ticketBuilder.ticket_user_id = myCinemaController.logged_user_id;
+				
+				myCinemaController.AddTicket(ticketBuilder);
+				
 				fillSeatsForShow();
 			};
 		};
