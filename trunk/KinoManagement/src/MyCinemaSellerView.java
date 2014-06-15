@@ -87,6 +87,9 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JButton tickets_buttonDeselectMovies;
 	public JButton tickets_buttonDeselectShows;
 	public JButton tickets_buttonDeselectTickets;
+	public JTextField tickets_user_id;
+	public JTextField tickets_seat_number;
+	public JComboBox tickets_state;
 	
 	//tabs
 	public JPanel tabUsers;

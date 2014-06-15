@@ -17,6 +17,10 @@ public class MyCinemaController
 {
 	private Connection con;
 	private Statement statement;
+	
+	public int logged_user_id;
+	public String logged_user_type;
+	
 	public MyCinemaController()
 	{
 		try
@@ -24,6 +28,8 @@ public class MyCinemaController
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://sql.devspot.home.pl","08692495_0000005","kompo123");
 			statement = con.createStatement();
+			logged_user_id = -1;
+			logged_user_type = "";
 		}
 		catch(Exception e)
 		{
@@ -45,7 +51,11 @@ public class MyCinemaController
 				String hashedPass = Hash(pass.toLowerCase().toString());
 			
 				if(realPass.equals(pass))
+				{
+					logged_user_id = results.getInt("user_id");
+					logged_user_type = "SELLER";
 					return true;
+				}
 				else
 					return false;
 			}else{
@@ -74,7 +84,11 @@ public class MyCinemaController
 				String hashedPass = Hash(pass.toLowerCase().toString());
 				//System.out.println(realPass + "  " + hashedPass);
 				if(realPass.equals(pass))
+				{
+					logged_user_id = results.getInt("user_id");
+					logged_user_type = "CUSTOMER";
 					return true;
+				}
 				else
 					return false;
 			}else{
@@ -87,6 +101,12 @@ public class MyCinemaController
 			System.out.println("Connection error");
 			return false;
 		}
+	}
+	public boolean logOut()
+	{
+		logged_user_id = -1;
+		logged_user_type = "";
+		return true;
 	}
 	public static String Hash(String input)
 	{
