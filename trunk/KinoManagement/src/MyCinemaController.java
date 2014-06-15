@@ -378,7 +378,7 @@ public class MyCinemaController
 		try
 		{
 			int tmpLenth = showsRow.show_date.toString().length();
-			String tmp = showsRow.show_date.toString().substring(0, tmpLenth-2);
+			//String tmp = showsRow.show_date.toString().substring(0, tmpLenth-2);
 			String sql = "UPDATE 08692495_0000005.shows" +
 						" SET show_date='" + showsRow.show_date + "'"+
 						" WHERE show_id='" + showsRow.show_id + "'";
@@ -480,5 +480,83 @@ public class MyCinemaController
 			tmpArray[i] = "User: " + list.get(i).ticket_user_id + " seat nr: " + list.get(i).ticket_seat_number + " ticket state: " + list.get(i).ticket_state; 
 		}
 		return tmpArray;
+	}
+	public int UpdateTicket(TicketsRow ticketsRow, int oldSeatNumber)
+	{
+		try
+		{
+			if(ticketsRow.ticket_seat_number != oldSeatNumber || oldSeatNumber == -1)
+			{
+				if(!CheckTicketSeatAvalible(ticketsRow.ticket_show_id,ticketsRow.ticket_seat_number))
+					return 2;
+			}
+			String sql = "UPDATE 08692495_0000005.tickets" +
+						" SET ticket_show_id='" + ticketsRow.ticket_show_id + "'"+
+						", ticket_user_id='" + ticketsRow.ticket_user_id + "'"+
+						", ticket_seat_number='" + ticketsRow.ticket_seat_number + "'"+
+						", ticket_state='" + ticketsRow.ticket_state + "'"+
+						", ticket_discount='" + ticketsRow.ticket_discount + "'"+
+						" WHERE ticket_id='" + ticketsRow.ticket_id + "'";
+			statement.executeUpdate(sql);
+			return 0;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return 1;
+		}
+	}
+	public int UpdateTicket(int ticket_id, String ticket_state)
+	{
+		try
+		{
+			String sql = "UPDATE 08692495_0000005.tickets" +
+						" SET ticket_state='" + ticket_state + "'"+
+						" WHERE ticket_id='" + ticket_id + "'";
+			statement.executeUpdate(sql);
+			return 0;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return 1;
+		}
+	}
+	public boolean CheckTicketSeatAvalible(int show_id, int seat_number)
+	{
+		try
+		{
+			String sql = "SELECT * FROM 08692495_0000005.tickets WHERE tickets.ticket_show_id='" + show_id + "'";
+			ResultSet results = statement.executeQuery(sql);
+			boolean condition = true;
+			while(results.next())
+			{
+				if(results.getInt("ticket_seat_number") == seat_number)
+				{
+					condition = false;
+				}
+			}
+			return condition;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
+	}
+	public boolean DeleteTicket(int ticket_id)
+	{
+		try
+		{
+			String sql = "DELETE FROM 08692495_0000005.tickets" +
+						" WHERE ticket_id='" + ticket_id + "'"; 
+			statement.execute(sql);
+			return true;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
 	}
 }
