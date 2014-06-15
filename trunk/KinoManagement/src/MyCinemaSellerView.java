@@ -84,6 +84,9 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JScrollPane tickets_scrollList;
 	public JList<String> tickets_ticketList;
 	public ArrayList<TicketsRow> ticketList;
+	public JButton tickets_buttonDeselectMovies;
+	public JButton tickets_buttonDeselectShows;
+	public JButton tickets_buttonDeselectTickets;
 	
 	//tabs
 	public JPanel tabUsers;
@@ -877,12 +880,20 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			{
 				if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
 				{
+					//update shows
 					MyCinemaSellerView.sellerView.tickets_showList = MyCinemaSellerView.sellerView.myCinemaController.GetShowsList(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
 					MyCinemaSellerView.sellerView.tickets_shows_showList.setListData(MyCinemaController.ShowsRowListToArray(MyCinemaSellerView.sellerView.tickets_showList));
+					
+					//update tickets
+					MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+					MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
 				}
 				else{
 					MyCinemaSellerView.sellerView.tickets_showList = MyCinemaSellerView.sellerView.myCinemaController.GetShowsList();
 					MyCinemaSellerView.sellerView.tickets_shows_showList.setListData(MyCinemaController.ShowsRowListToArray(MyCinemaSellerView.sellerView.tickets_showList));
+					
+					MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+					MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
 				}
 			}
 		};
@@ -908,12 +919,42 @@ public class MyCinemaSellerView extends CinemaContentPanel
 					MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
 				}
 				else{
-					MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
-					MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+					if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
+					{
+						MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+						MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+					}else{
+						MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+						MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+					}
 				}
 			}
 		};
 		this.tickets_shows_showList.addListSelectionListener(actionIndexChanged_shows);
+		
+		this.tickets_buttonDeselectMovies = new JButton("Deselect");
+		this.tickets_buttonDeselectMovies.setBounds( 50, 20, 100,20);
+		this.tabTickets.add(tickets_buttonDeselectMovies);
+		ActionListener actionDeselectMovies = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				MyCinemaSellerView.sellerView.tickets_shows_movieListJList.clearSelection();
+			}
+		};
+		this.tickets_buttonDeselectMovies.addActionListener(actionDeselectMovies);
+		
+		this.tickets_buttonDeselectShows = new JButton("Deselect");
+		this.tickets_buttonDeselectShows.setBounds( 275, 20, 100,20);
+		this.tabTickets.add(tickets_buttonDeselectShows);
+		ActionListener actionDeselectShows = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				MyCinemaSellerView.sellerView.tickets_shows_showList.clearSelection();
+			}
+		};
+		this.tickets_buttonDeselectShows.addActionListener(actionDeselectShows);
 	}
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{
