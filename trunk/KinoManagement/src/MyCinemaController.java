@@ -559,4 +559,20 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	public int AddTicket(TicketsRow ticketsRow)
+	{
+		try
+		{
+			String sql = "INSERT INTO 08692495_0000005.tickets (ticket_show_id,ticket_user_id,ticket_seat_number,ticket_state,ticket_discount)" +
+						" VALUES ('" + ticketsRow.ticket_show_id + "','" + ticketsRow.ticket_user_id + "','" + ticketsRow.ticket_seat_number + "','" + ticketsRow.ticket_state +"','" + ticketsRow.ticket_discount +"')";
+			statement.execute(sql);
+			return 0;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return 1;
+		}
+	}
 }

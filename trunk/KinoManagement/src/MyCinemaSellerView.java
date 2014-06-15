@@ -92,6 +92,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JComboBox tickets_state;
 	public JButton tickets_buttonUpdate;
 	public JButton tickets_buttonDelete;
+	public JButton tickets_buttonAdd;
 	
 	//tabs
 	public JPanel tabUsers;
@@ -1067,6 +1068,104 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			}
 		};
 		this.tickets_buttonUpdate.addActionListener(actionTicketUpdate);
+		
+		this.tickets_buttonDelete = new JButton("Delete");
+		this.tickets_buttonDelete.setBounds(650 , 280, 90,20);
+		this.tabTickets.add(tickets_buttonDelete);
+		ActionListener actionTicketDelete = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex() != -1)
+				{
+					int ticket_id = MyCinemaSellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex()).ticket_id;
+					MyCinemaSellerView.sellerView.myCinemaController.DeleteTicket(ticket_id);
+					//update
+					if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
+					{
+						MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
+						MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+					}
+					else{
+						if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
+						{
+							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+							MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+						}else{
+							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+							MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+						}
+					}
+					
+				}else{
+					JOptionPane.showMessageDialog(null, "Pick ticket to delete.");
+				}
+			}
+		};
+		this.tickets_buttonDelete.addActionListener(actionTicketDelete);
+		
+		this.tickets_buttonAdd = new JButton("Add");
+		this.tickets_buttonAdd.setBounds(450, 280, 90, 20);
+		this.tabTickets.add(tickets_buttonAdd);
+		ActionListener actionTicketAdd = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				if(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex() != -1)
+				{
+					JOptionPane.showMessageDialog(null, "You have to deselect existing ticket to add one.");
+					return;
+				}
+				if(MyCinemaSellerView.sellerView.tickets_user_id.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Fill in the user id field.");
+					return;
+				}
+				if(MyCinemaSellerView.sellerView.tickets_seat_number.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Fill in the seat number field.");
+					return;
+				}
+				try
+				{
+					TicketsRow tmpRow = new TicketsRow();
+					tmpRow.ticket_id = -1;
+					tmpRow.ticket_user_id = Integer.parseInt(MyCinemaSellerView.sellerView.tickets_user_id.getText());
+					tmpRow.ticket_seat_number = Integer.parseInt(MyCinemaSellerView.sellerView.tickets_seat_number.getText());
+					tmpRow.ticket_state = String.valueOf(MyCinemaSellerView.sellerView.tickets_state.getSelectedItem());
+					tmpRow.ticket_show_id = MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id;
+					tmpRow.ticket_discount = "";
+					
+					int result = MyCinemaSellerView.sellerView.myCinemaController.AddTicket(tmpRow);
+					if(result == 0)
+					{
+						//update
+						if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
+						{
+							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
+							MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+						}
+						else{
+							if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
+							{
+								MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+								MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+							}else{
+								MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+								MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+							}
+						}
+					}else{
+						JOptionPane.showMessageDialog(null, "Pick diffrent seat number");
+					}
+				}
+				catch(NumberFormatException en)
+				{
+					JOptionPane.showMessageDialog(null,"Fill in fields with apropriate numbers.");
+				}
+			}
+		};
+		this.tickets_buttonAdd.addActionListener(actionTicketAdd);
 	}
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{
