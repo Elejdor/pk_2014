@@ -87,6 +87,7 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		tabtickets.add(shows_scrollList);
 		this.showsList = this.myCinemaController.GetShowsList();
 		this.shows_showsList.setListData(MyCinemaController.ShowsRowListToArray(this.showsList));
+		
 		createSeats(7, 5, 420, 50, 50, 30, 2);
 		
 		ListSelectionListener actionIndexChanged = new ListSelectionListener() 
@@ -98,9 +99,9 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 					tickets = myCinemaController.GetTicketsList(showsList.get(shows_showsList.getSelectedIndex()).show_id);
 					
 					fillSeatsForShow();
-					System.out.println("Filling");
+					System.out.println("Filled");
 				} else{
-					System.out.println("Wut");
+
 				}
 			}
 		};
@@ -124,21 +125,152 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	}
 	
 	private void fillSeatsForShow()
-	{
-
-		for (int i = 0; i < seats.size(); i++) {
+	{		
+		for (int i = 0; i < seats.size(); i++) 
+		{
 			seats.get(i).button.setBackground(Color.green);
+			seats.get(i).button.setEnabled(true);
+			
+			ActionListener[] als = seats.get(i).button.getActionListeners();
+			if (als.length > 0)
+				seats.get(i).button.removeActionListener(als[0]);
+			
+			for (int j = 0; j < tickets.size(); j++) 
+			{
 
-			for (int j = 0; j < tickets.size(); j++) {
-				System.out.println(tickets.get(j).ticket_show_id);
 				if (tickets.get(j).ticket_seat_number == i)
 				{
-					//TODO if (tickets.get(j).user_id == loggedin) Color = blue;
-					seats.get(i).button.setBackground(Color.red);
+					if (myCinemaController.logged_user_id == tickets.get(j).ticket_user_id)
+					{
+						if (tickets.get(j).ticket_state == "BOUGHT")
+						{
+							seats.get(i).button.setBackground(Color.yellow);	
+							seats.get(i).button.addActionListener(GetListenerForBought());
+						}
+						else
+						{
+							seats.get(i).button.setBackground(Color.blue);
+							seats.get(i).booked = true;		
+							seats.get(i).button.addActionListener(GetListenerForReserved());
+						}
+					}
 				}
-
+				else
+				{
+					seats.get(i).button.setBackground(Color.red);
+					seats.get(i).button.setEnabled(false);
+				}
 			}
 		}
+	}
+	
+	private ActionListener GetListenerForReserved()
+	{
+		ActionListener action = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				Object[] possibleValues = { "Buy", "Cancel reservation"};
+				Object selectedValue = JOptionPane.showInputDialog(null,
+					"Choose one", "Input",
+					JOptionPane.INFORMATION_MESSAGE, null,
+					possibleValues, possibleValues[0]);
+				JButton btn = (JButton)e.getSource();
+				
+				int seatNumber = Integer.parseInt(btn.getText());
+				
+				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
+				
+				if (selectedValue != null)
+				{
+					TicketsRow tmpTicket = new TicketsRow();
+					for (int i = 0; i < tickets.size(); i++) {
+						if (tickets.get(i).ticket_seat_number == seatNumber)
+						{
+							tmpTicket = tickets.get(i);
+							break;
+						}
+					}
+					
+					if (selectedValue.equals(possibleValues[0]))
+					{
+						btn.setBackground(Color.yellow);
+						System.out.println("Ticket bought " + Integer.toString(tmpTicket.ticket_id));
+						//TODO: update database with "BOUGHT" for ticket
+					}
+					else if (selectedValue.equals(possibleValues[1]))
+					{
+						btn.setBackground(Color.green);
+						System.out.println("Ticket canceled " + Integer.toString(tmpTicket.ticket_id));
+						//TODO: remove record of the ticket
+						
+					}
+				}
+			}
+		};
+			return action;
+	}
+	
+	private ActionListener GetListenerForBought()
+	{
+		ActionListener action = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				Object[] possibleValues = { "Return ticket"};
+				Object selectedValue = JOptionPane.showInputDialog(null,
+					"Choose one", "Input",
+					JOptionPane.INFORMATION_MESSAGE, null,
+					possibleValues, possibleValues[0]);
+				JButton btn = (JButton)e.getSource();
+				
+				int seatNumber = Integer.parseInt(btn.getText());
+				
+				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
+				
+				if (selectedValue != null)
+				{
+					TicketsRow tmpTicket = new TicketsRow();
+					for (int i = 0; i < tickets.size(); i++) {
+						if (tickets.get(i).ticket_seat_number == seatNumber)
+						{
+							tmpTicket = tickets.get(i);
+							break;
+						}
+					}
+					
+					if (selectedValue.equals(possibleValues[0]))
+					{
+						btn.setBackground(Color.green);
+						System.out.println("Ticket canceled " + Integer.toString(tmpTicket.ticket_id));
+						//TODO: remove record of the ticket
+						
+					}
+					fillSeatsForShow();
+				}
+			};
+		};
+		return action;
+	}
+	
+	private ActionListener GetListenerForFree()
+	{
+		ActionListener action = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				Object[] possibleValues = { "Return ticket"};
+				Object selectedValue = JOptionPane.showInputDialog(null,
+					"Choose one", "Input",
+					JOptionPane.INFORMATION_MESSAGE, null,
+					possibleValues, possibleValues[0]);
+				JButton btn = (JButton)e.getSource();
+				
+				int seatNumber = Integer.parseInt(btn.getText());
+				
+				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
+				
+				fillSeatsForShow();
+			};
+		};
+		return action;
 	}
 	
 	private void createSeats(int rows, int cols, int startPosX, int startPosY, int width, int height, int margins)
