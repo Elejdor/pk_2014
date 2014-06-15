@@ -90,6 +90,8 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JTextField tickets_user_id;
 	public JTextField tickets_seat_number;
 	public JComboBox tickets_state;
+	public JButton tickets_buttonUpdate;
+	public JButton tickets_buttonDelete;
 	
 	//tabs
 	public JPanel tabUsers;
@@ -958,6 +960,56 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			}
 		};
 		this.tickets_buttonDeselectShows.addActionListener(actionDeselectShows);
+		
+		JLabel user_id_label = new JLabel("User id");
+		user_id_label.setBounds(450, 230, 90, 20);
+		this.tabTickets.add(user_id_label);
+		this.tickets_user_id = new JTextField();
+		this.tickets_user_id.setBounds(450, 250, 90, 20);
+		this.tabTickets.add(tickets_user_id);
+		
+		JLabel seat_number_label = new JLabel("Seat number");
+		seat_number_label.setBounds(550, 230, 90, 20);
+		this.tabTickets.add(seat_number_label);
+		this.tickets_seat_number = new JTextField();
+		this.tickets_seat_number.setBounds(550, 250, 90, 20);
+		this.tabTickets.add(tickets_seat_number);
+		
+		JLabel state_label = new JLabel("Ticket state");
+		state_label.setBounds(650, 230, 90, 20);
+		this.tabTickets.add(state_label);
+		this.tickets_state = new JComboBox<String>();
+		this.tickets_state.setBounds(650, 250, 90, 20);
+		this.tickets_state.addItem("RESERVATION");
+		this.tickets_state.addItem("BOUGHT");
+		this.tickets_state.addItem("USED");
+		this.tabTickets.add(tickets_state);
+		
+		ListSelectionListener actionIndexChanged_tickets = new ListSelectionListener() 
+		{
+			public void valueChanged(ListSelectionEvent arg0) 
+			{
+				if(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex() != -1)
+				{
+					
+					TicketsRow tmpRow = MyCinemaSellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex());
+					MyCinemaSellerView.sellerView.tickets_user_id.setText(String.valueOf(tmpRow.ticket_user_id));
+					MyCinemaSellerView.sellerView.tickets_seat_number.setText(String.valueOf(tmpRow.ticket_seat_number));
+					MyCinemaSellerView.sellerView.tickets_state.setSelectedItem(String.valueOf(tmpRow.ticket_state));
+				}
+				else{
+					MyCinemaSellerView.sellerView.tickets_user_id.setText("");
+					MyCinemaSellerView.sellerView.tickets_seat_number.setText("");
+					MyCinemaSellerView.sellerView.tickets_state.setSelectedItem("RESERVATION");
+				}
+			}
+		};
+		this.tickets_ticketList.addListSelectionListener(actionIndexChanged_tickets);
+		
+		this.tickets_buttonUpdate = new JButton("Update");
+		this.tickets_buttonUpdate.setBounds( 550, 280, 90,20);
+		this.tabTickets.add(tickets_buttonUpdate);
+		
 	}
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{
