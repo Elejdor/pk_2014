@@ -95,11 +95,9 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 			public void valueChanged(ListSelectionEvent arg0) 
 			{
 				if(shows_showsList.getSelectedIndex() != -1)
-				{
-					tickets = myCinemaController.GetTicketsList(showsList.get(shows_showsList.getSelectedIndex()).show_id);
+				{				
 					
 					fillSeatsForShow();
-					System.out.println("Filled");
 				} else{
 
 				}
@@ -126,23 +124,28 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	
 	private void fillSeatsForShow()
 	{		
+		tickets = myCinemaController.GetTicketsList(showsList.get(shows_showsList.getSelectedIndex()).show_id);
 		for (int i = 0; i < seats.size(); i++) 
 		{
 			seats.get(i).button.setBackground(Color.green);
 			seats.get(i).button.setEnabled(true);
 			
 			ActionListener[] als = seats.get(i).button.getActionListeners();
+			for (int a = 0; a < als.length; a++) {
+				seats.get(i).button.removeActionListener(als[a]);
+			}
+			
 			if (als.length > 0)
 				seats.get(i).button.removeActionListener(als[0]);
 			
 			for (int j = 0; j < tickets.size(); j++) 
 			{
-
 				if (tickets.get(j).ticket_seat_number == i)
 				{
 					if (myCinemaController.logged_user_id == tickets.get(j).ticket_user_id)
 					{
-						if (tickets.get(j).ticket_state == "BOUGHT")
+						System.out.println(tickets.get(j).ticket_state);
+						if (tickets.get(j).ticket_state.equals("BOUGHT"))
 						{
 							seats.get(i).button.setBackground(Color.yellow);	
 							seats.get(i).button.addActionListener(GetListenerForBought());
@@ -150,16 +153,16 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 						else
 						{
 							seats.get(i).button.setBackground(Color.blue);
-							seats.get(i).booked = true;		
 							seats.get(i).button.addActionListener(GetListenerForReserved());
 						}
 					}
+					else
+					{
+						seats.get(i).button.setBackground(Color.red);
+						seats.get(i).button.setEnabled(false);
+					}
 				}
-				else
-				{
-					seats.get(i).button.setBackground(Color.red);
-					seats.get(i).button.setEnabled(false);
-				}
+
 			}
 		}
 	}
@@ -178,8 +181,6 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 				
 				int seatNumber = Integer.parseInt(btn.getText());
 				
-				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
-				
 				if (selectedValue != null)
 				{
 					TicketsRow tmpTicket = new TicketsRow();
@@ -189,25 +190,25 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 							tmpTicket = tickets.get(i);
 							break;
 						}
-					}
-					
+					}					
 					if (selectedValue.equals(possibleValues[0]))
 					{
 						btn.setBackground(Color.yellow);
 						System.out.println("Ticket bought " + Integer.toString(tmpTicket.ticket_id));
-						//TODO: update database with "BOUGHT" for ticket
+						myCinemaController.UpdateTicket(tmpTicket.ticket_id, "BOUGHT");
 					}
 					else if (selectedValue.equals(possibleValues[1]))
 					{
 						btn.setBackground(Color.green);
-						System.out.println("Ticket canceled " + Integer.toString(tmpTicket.ticket_id));
-						//TODO: remove record of the ticket
+						System.out.println("Reserved ticket deleted " + Integer.toString(tmpTicket.ticket_id));
+						myCinemaController.DeleteTicket(tmpTicket.ticket_id);
 						
 					}
 				}
+				fillSeatsForShow();
 			}
 		};
-			return action;
+		return action;
 	}
 	
 	private ActionListener GetListenerForBought()
@@ -224,7 +225,7 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 				
 				int seatNumber = Integer.parseInt(btn.getText());
 				
-				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
+				//int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
 				
 				if (selectedValue != null)
 				{
@@ -240,12 +241,12 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 					if (selectedValue.equals(possibleValues[0]))
 					{
 						btn.setBackground(Color.green);
-						System.out.println("Ticket canceled " + Integer.toString(tmpTicket.ticket_id));
-						//TODO: remove record of the ticket
-						
+						System.out.println("Bought ticket removed " + Integer.toString(tmpTicket.ticket_id));
+						myCinemaController.DeleteTicket(tmpTicket.ticket_id);
 					}
-					fillSeatsForShow();
+					
 				}
+				fillSeatsForShow();
 			};
 		};
 		return action;
@@ -266,7 +267,7 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 				int seatNumber = Integer.parseInt(btn.getText());
 				
 				int showId = showsList.get(shows_showsList.getSelectedIndex()).show_id;
-				
+				//TODO: add ticket (sql)
 				fillSeatsForShow();
 			};
 		};
