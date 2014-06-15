@@ -1166,6 +1166,18 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			}
 		};
 		this.tickets_buttonAdd.addActionListener(actionTicketAdd);
+		
+		this.tickets_buttonDeselectTickets = new JButton("Deselect");
+		this.tickets_buttonDeselectTickets.setBounds( 450, 20, 100,20);
+		this.tabTickets.add(tickets_buttonDeselectTickets);
+		ActionListener actionDeselectTickets = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				MyCinemaSellerView.sellerView.tickets_ticketList.clearSelection();
+			}
+		};
+		this.tickets_buttonDeselectTickets.addActionListener(actionDeselectTickets);
 	}
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{
