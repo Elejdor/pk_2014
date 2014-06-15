@@ -39,11 +39,17 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	private JPanel tabTickets;
 	private JPanel tabFinancials;
 	
+	private class Seat
+	{
+		public JButton button;
+		public boolean booked = false;
+	}
+	
 	//tickets tab
 	public JScrollPane shows_scrollList;
 	public JList<String> shows_showsList;
 	public ArrayList<ShowsRow> showsList;
-	public ArrayList<JButton> places;
+	public ArrayList<Seat> seats = new ArrayList<Seat>();
 	
 	public MyCinemaCustomerView(MyCinemaController myCinemaController)
 	{
@@ -94,7 +100,8 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		};
 		this.shows_showsList.addListSelectionListener(actionIndexChanged);
 		
-		createPlaces(7, 5, 420, 50, 50, 30, 2);
+		createSeats(7, 5, 420, 50, 50, 30, 2);
+		fillSeatsForShow();
 	}
 	private void initializeTabShows(JTabbedPane jTabbedPane)
 	{
@@ -111,22 +118,29 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		jTabbedPane.add(tabFinancials);
 	}
 	
-	private void fillPlacesForShow()
+	private void fillSeatsForShow()
 	{
-		
+		for (int i = 0; i < seats.size(); i++) {
+			if (seats.get(i).booked == false)
+			{
+				seats.get(i).button.setBackground(Color.red);
+			}
+		}
 	}
 	
-	private void createPlaces(int rows, int cols, int startPosX, int startPosY, int width, int height, int margins)
+	private void createSeats(int rows, int cols, int startPosX, int startPosY, int width, int height, int margins)
 	{
-		places = new ArrayList<JButton>();
+		
 		for (int r = 0; r < rows; r++)
 		{
 			for (int c = 0; c < cols; c++)
 			{
+				Seat tmpSeat = new Seat();
 				JButton tmpBtn = new JButton(Integer.toString(c+cols*r));
 				tmpBtn.setBounds(startPosX + c * (width+margins), startPosY + r* (height + margins), width, height);
 				tabtickets.add(tmpBtn);
-				places.add(tmpBtn);
+				tmpSeat.button = tmpBtn;
+				seats.add(tmpSeat);
 			}
 				
 		}
