@@ -287,6 +287,7 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 				Seat tmpSeat = new Seat();
 				JButton tmpBtn = new JButton(Integer.toString(c+cols*r));
 				tmpBtn.setBounds(startPosX + c * (width+margins), startPosY + r* (height + margins), width, height);
+				tmpBtn.setEnabled(false);
 				tabtickets.add(tmpBtn);
 				tmpSeat.button = tmpBtn;
 				seats.add(tmpSeat);
