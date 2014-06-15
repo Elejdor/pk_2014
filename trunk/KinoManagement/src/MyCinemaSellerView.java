@@ -81,7 +81,9 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JScrollPane tickets_shows_movie_scrollList;
 	public JList<String> tickets_shows_movieListJList;
 	public ArrayList<MoviesRow> tickets_shows_movieListArray;
-	
+	public JScrollPane tickets_scrollList;
+	public JList<String> tickets_ticketList;
+	public ArrayList<TicketsRow> ticketList;
 	
 	//tabs
 	public JPanel tabUsers;
@@ -862,7 +864,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		this.tickets_shows_showList = new JList<String>();
 		this.tickets_shows_showList.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		this.tickets_shows_scrollList = new JScrollPane();
-		this.tickets_shows_scrollList.setBounds(300, 50, 150, 150);
+		this.tickets_shows_scrollList.setBounds(275, 50, 150, 150);
 		this.tickets_shows_scrollList.setVisible(true);
 		this.tickets_shows_scrollList.setViewportView(tickets_shows_showList);
 		tabTickets.add(tickets_shows_scrollList);
@@ -885,7 +887,33 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			}
 		};
 		this.tickets_shows_movieListJList.addListSelectionListener(actionIndexChanged_movies);
+		
+		this.tickets_ticketList = new JList<String>();
+		this.tickets_ticketList.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+		this.tickets_scrollList = new JScrollPane();
+		this.tickets_scrollList.setBounds(450, 50, 300, 150);
+		this.tickets_scrollList.setVisible(true);
+		tickets_scrollList.setViewportView(tickets_ticketList);
+		tabTickets.add(tickets_scrollList);
+		this.ticketList = this.myCinemaController.GetTicketsList();
+		this.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(this.ticketList));
 
+		ListSelectionListener actionIndexChanged_shows = new ListSelectionListener() 
+		{
+			public void valueChanged(ListSelectionEvent arg0) 
+			{
+				if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
+				{
+					MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
+					MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+				}
+				else{
+					MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+					MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+				}
+			}
+		};
+		this.tickets_shows_showList.addListSelectionListener(actionIndexChanged_shows);
 	}
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{

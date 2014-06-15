@@ -410,6 +410,27 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	public ArrayList<TicketsRow> GetTicketsList()
+	{
+		try 
+		{
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM 08692495_0000005.tickets ORDER BY tickets.ticket_seat_number");
+			int count = 0;
+			TicketsRow tmp = new TicketsRow();
+			
+			ArrayList<TicketsRow> tmpList = new ArrayList<TicketsRow>();
+			while(resultSet.next())
+			{
+				count++;
+				tmp = new TicketsRow(resultSet.getInt(1),resultSet.getInt(2),resultSet.getInt(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getString(6));
+				tmpList.add(tmp);
+			}
+			return tmpList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static String[] TicketsRowListToArray(ArrayList<TicketsRow> list)
 	{
 		String[] tmpArray = new String[list.size()];
