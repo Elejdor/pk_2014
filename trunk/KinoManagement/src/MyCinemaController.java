@@ -577,4 +577,35 @@ public class MyCinemaController
 			return 1;
 		}
 	}
+	
+	public ArrayList<FinancialsRow> GetFinancialsList()
+	{
+		try 
+		{
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM 08692495_0000005.financials ORDER BY financials.financials_date");
+			int count = 0;
+			FinancialsRow tmp = new FinancialsRow();
+			
+			ArrayList<FinancialsRow> tmpList = new ArrayList<FinancialsRow>();
+			while(resultSet.next())
+			{
+				count++;
+				tmp = new FinancialsRow(resultSet.getInt(1), resultSet.getDouble(2), resultSet.getTimestamp(3), resultSet.getString(4), resultSet.getString(5));
+				tmpList.add(tmp);
+			}
+			return tmpList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public static String[] FinancialsRowListToArray(ArrayList<FinancialsRow> list)
+	{
+		String[] tmpArray = new String[list.size()];
+		for(int i = 0;i < list.size();i++)
+		{
+			tmpArray[i] =  list.get(i).financials_date + "  " + list.get(i).financials_type + "  " + list.get(i).financials_value + "  " + list.get(i).financials_description; 
+		}
+		return tmpArray;
+	}
 }

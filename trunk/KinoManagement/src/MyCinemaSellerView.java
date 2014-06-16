@@ -94,6 +94,15 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JButton tickets_buttonDelete;
 	public JButton tickets_buttonAdd;
 	
+	//financials tab
+	public JScrollPane financials_scrollList;
+	public JList<String> financials_financialList;
+	public ArrayList<FinancialsRow> financialList;
+	public JTextField financials_value;
+	public JTextField financials_date;
+	public JComboBox<String> financials_type;
+	public JTextField financials_description;
+	
 	//tabs
 	public JPanel tabUsers;
 	public JPanel tabMovies;
@@ -1183,7 +1192,67 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	{
 		tabFinancials = new JPanel();
 		tabFinancials.setName("Financials");
+		tabFinancials.setLayout(null);
 		tabFinancials.setBackground(this.getBackground().brighter());
 		jTabbedPane.add(tabFinancials);
+		
+		this.financials_financialList = new JList<String>();
+		this.financials_financialList.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+		this.financials_scrollList = new JScrollPane();
+		this.financials_scrollList.setBounds(50, 50, 450, 270);
+		this.financials_scrollList.setVisible(true);
+		this.financials_scrollList.setViewportView(financials_financialList);
+		tabFinancials.add(financials_scrollList);
+		this.financialList = this.myCinemaController.GetFinancialsList();
+		this.financials_financialList.setListData(MyCinemaController.FinancialsRowListToArray(this.financialList));
+		ListSelectionListener actionIndexChanged_financials = new ListSelectionListener() 
+		{
+			public void valueChanged(ListSelectionEvent arg0) 
+			{
+				if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+				{
+					
+				}
+			}
+		};
+		
+		JLabel financials_value_label = new JLabel("Value:");
+		financials_value_label.setHorizontalAlignment(SwingConstants.RIGHT);
+		financials_value_label.setBounds(450, 50,100,20);
+		financials_value_label.setVisible(true);
+		tabFinancials.add(financials_value_label);
+		this.financials_value = new JTextField();
+		this.financials_value.setBounds(550, 50, 200, 20);
+		tabFinancials.add(financials_value);
+		
+		JLabel financials_date_label = new JLabel("Date:");
+		financials_date_label.setHorizontalAlignment(SwingConstants.RIGHT);
+		financials_date_label.setBounds(450, 80,100,20);
+		financials_date_label.setVisible(true);
+		tabFinancials.add(financials_date_label);
+		this.financials_date = new JTextField();
+		this.financials_date.setBounds(550, 80, 200, 20);
+		tabFinancials.add(financials_date);
+		
+		JLabel financials_type_label = new JLabel("Type:");
+		financials_type_label.setHorizontalAlignment(SwingConstants.RIGHT);
+		financials_type_label.setBounds(450, 110,100,20);
+		financials_type_label.setVisible(true);
+		tabFinancials.add(financials_type_label);
+		this.financials_type = new JComboBox<String>();
+		this.financials_type.addItem("LICENCE");
+		this.financials_type.addItem("TICKET");
+		this.financials_type.setEditable(false);
+		this.financials_type.setBounds(550, 110, 200, 20);
+		tabFinancials.add(financials_type);
+		
+		JLabel financials_description_label = new JLabel("Text:");
+		financials_description_label.setHorizontalAlignment(SwingConstants.RIGHT);
+		financials_description_label.setBounds(450, 140,100,20);
+		financials_description_label.setVisible(true);
+		tabFinancials.add(financials_description_label);
+		this.financials_description = new JTextField();
+		this.financials_description.setBounds(550, 140, 200, 20);
+		tabFinancials.add(financials_description);
 	}
 }
