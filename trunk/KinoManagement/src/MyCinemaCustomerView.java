@@ -55,6 +55,10 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	private JComboBox<String> cbMovies;
 	private ArrayList<MoviesRow> MoviesList = new ArrayList<MoviesRow>();
 	
+	//profile tab
+	private ArrayList<JTextField> inputForm = new ArrayList<JTextField>();
+	UsersRow currentlyLogged;
+	
 	public MyCinemaCustomerView(MyCinemaController myCinemaController)
 	{
 		this.myCinemaController = myCinemaController;		
@@ -148,12 +152,64 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		tabProfile.setName("My profile");
 		tabProfile.setLayout(null);
 		tabProfile.setBackground(this.getBackground().brighter());
-		jTabbedPane.add(tabProfile);
+		jTabbedPane.add(tabProfile);		
 		
-		JTextField userName = new JTextField();
-		userName.setBounds(50, 50, 200, 25);
-		UsersRow usr = myCinemaController.GetUser(myCinemaController.logged_user_id);
-		tabProfile.add(userName);
+		
+		int tfWidth = 100, tfHeight = 25;
+		currentlyLogged = myCinemaController.GetUser(myCinemaController.logged_user_id);
+		String[][] tfValues = new String[][] {
+				{"Login", currentlyLogged.user_login}, 
+				{"Password", currentlyLogged.user_pass} ,
+				{"Name", currentlyLogged.user_name}, 
+				{"Surname", currentlyLogged.user_surname}, 
+				{"age", Integer.toString(currentlyLogged.user_age)}};
+		
+		for (int i = 0; i < tfValues.length; i++)
+		{
+			CreateLabel(tfValues[i][0], tabProfile, 50, 50+i*(tfHeight + 5), tfWidth, tfHeight);
+			inputForm.add(CreateTextField(tfValues[i][1], tabProfile, 50+100, 50+i*(tfHeight + 5), tfWidth, tfHeight));			
+		}
+		
+		JButton btnSubmit = new JButton();
+		btnSubmit.setText("Submit");
+		btnSubmit.setBounds(50, (tfValues.length+1)*(tfHeight+5)+50, 100, 25);
+		btnSubmit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				UsersRow updatingUser = new UsersRow();
+				updatingUser.user_id = myCinemaController.logged_user_id;
+				updatingUser.user_login = inputForm.get(0).getText();
+				updatingUser.user_pass = inputForm.get(1).getText();
+				updatingUser.user_type = currentlyLogged.user_type;
+				updatingUser.user_name = inputForm.get(2).getText();
+				updatingUser.user_surname = inputForm.get(3).getText();
+				updatingUser.user_age = Integer.parseInt(inputForm.get(4).getText());
+				
+				myCinemaController.UpdateUser(updatingUser);
+			}
+		});
+		tabProfile.add(btnSubmit);
+	}
+	
+	private JTextField CreateTextField(String text, JPanel panel, int x, int y, int width, int height)
+	{
+		JTextField textField = new JTextField();
+		textField.setBounds(x, y, width, height);
+		textField.setText(text);
+		panel.add(textField);
+		return textField;
+	}
+	
+	private JLabel CreateLabel(String text, JPanel panel, int x, int y, int width, int height)
+	{
+		JLabel label = new JLabel();
+		label.setBounds(x, y, width, height);
+		label.setText(text);
+		panel.add(label);
+		return label;
 	}
 	
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
