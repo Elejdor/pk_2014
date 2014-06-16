@@ -152,9 +152,8 @@ public class MyCinemaController
 			String sql = "SELECT * FROM 08692495_0000005.users WHERE users.user_id='" + user_id + "'";
 			ResultSet resultSet = statement.executeQuery(sql);
 			UsersRow result = new UsersRow();
+			resultSet.next();
 			result = new UsersRow(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getString(4),resultSet.getString(5),resultSet.getString(6),resultSet.getInt(7));
-			if (user_id == 2)
-				throw new SQLException();
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
