@@ -33,24 +33,14 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 {
 	private MyCinemaController myCinemaController;
 	
-	private JPanel tabtickets;
-	private JPanel tabProfile;
-	
 	private JPanel tabTickets;
-	private JPanel tabFinancials;
-	
-	
-	private class Seat
-	{
-		public JButton button;
-		public boolean booked = false;
-	}
+	private JPanel tabProfile;	
 	
 	//tickets tab
 	public JScrollPane shows_scrollList;
 	public JList<String> shows_showsList;
 	public ArrayList<ShowsRow> showsList;
-	public ArrayList<Seat> seats = new ArrayList<Seat>();
+	public ArrayList<JButton> seats = new ArrayList<JButton>();
 	public ArrayList<TicketsRow> tickets = new ArrayList<TicketsRow>();
 	private JComboBox<String> cbMovies;
 	private ArrayList<MoviesRow> MoviesList = new ArrayList<MoviesRow>();
@@ -73,18 +63,17 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 
 		initializeTabTickets(jTabbedPane);
 		initializeTabProfile(jTabbedPane);
-		initializeTabFinancials(jTabbedPane);
 		
 		this.add(jTabbedPane);
 	}
 	
 	private void initializeTabTickets(JTabbedPane jTabbedPane)
 	{
-		tabtickets = new JPanel();
-		tabtickets.setName("Tickets");
-		tabtickets.setLayout(null);
-		tabtickets.setBackground(this.getBackground().brighter());
-		jTabbedPane.add(tabtickets);
+		tabTickets = new JPanel();
+		tabTickets.setName("Tickets");
+		tabTickets.setLayout(null);
+		tabTickets.setBackground(this.getBackground().brighter());
+		jTabbedPane.add(tabTickets);
 		
 		
 		//movies combo box
@@ -112,7 +101,7 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 				clearSeats();
 			}
 		});
-		this.tabtickets.add(cbMovies);
+		this.tabTickets.add(cbMovies);
 		
 		//Shows list
 		this.shows_showsList = new JList<String>();
@@ -122,7 +111,7 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		this.shows_scrollList.setVisible(true);
 		this.shows_scrollList.setViewportView(shows_showsList);
 		
-		this.tabtickets.add(shows_scrollList);
+		this.tabTickets.add(shows_scrollList);
 		
 		showsList = myCinemaController.GetShowsList(MoviesList.get(cbMovies.getSelectedIndex()).movie_id);
 		this.shows_showsList.setListData(MyCinemaController.ShowsRowListToArray(this.showsList));
@@ -212,19 +201,11 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		return label;
 	}
 	
-	private void initializeTabFinancials(JTabbedPane jTabbedPane)
-	{
-		tabFinancials = new JPanel();
-		tabFinancials.setName("Financials");
-		tabFinancials.setBackground(this.getBackground().brighter());
-		jTabbedPane.add(tabFinancials);
-	}
-	
 	private void clearSeats()
 	{
 		for (int i = 0; i < seats.size(); i++) {
-			seats.get(i).button.setBackground(Color.gray);
-			seats.get(i).button.setEnabled(false);
+			seats.get(i).setBackground(Color.gray);
+			seats.get(i).setEnabled(false);
 		}
 	}
 	
@@ -233,36 +214,36 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		tickets = myCinemaController.GetTicketsList(showsList.get(shows_showsList.getSelectedIndex()).show_id);
 		for (int i = 0; i < seats.size(); i++) 
 		{
-			seats.get(i).button.setBackground(Color.green);
-			seats.get(i).button.setEnabled(true);
+			seats.get(i).setBackground(Color.green);
+			seats.get(i).setEnabled(true);
 			
-			ClearActionListeners(seats.get(i).button);
+			ClearActionListeners(seats.get(i));
 			
-			seats.get(i).button.addActionListener(GetListenerForRegular());
+			seats.get(i).addActionListener(GetListenerForRegular());
 			
 			for (int j = 0; j < tickets.size(); j++) 
 			{
 				if (tickets.get(j).ticket_seat_number == i)
 				{
-					ClearActionListeners(seats.get(i).button);
+					ClearActionListeners(seats.get(i));
 					
 					if (myCinemaController.logged_user_id == tickets.get(j).ticket_user_id)
 					{
 						if (tickets.get(j).ticket_state.equals("BOUGHT"))
 						{
-							seats.get(i).button.setBackground(Color.yellow);	
-							seats.get(i).button.addActionListener(GetListenerForBought());
+							seats.get(i).setBackground(Color.yellow);	
+							seats.get(i).addActionListener(GetListenerForBought());
 						}
 						else
 						{
-							seats.get(i).button.setBackground(Color.blue);
-							seats.get(i).button.addActionListener(GetListenerForReserved());
+							seats.get(i).setBackground(Color.blue);
+							seats.get(i).addActionListener(GetListenerForReserved());
 						}
 					}
 					else
 					{
-						seats.get(i).button.setBackground(Color.red);
-						seats.get(i).button.setEnabled(false);
+						seats.get(i).setBackground(Color.red);
+						seats.get(i).setEnabled(false);
 					}
 				}
 
@@ -389,15 +370,13 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		for (int r = 0; r < rows; r++)
 		{
 			for (int c = 0; c < cols; c++)
-			{
-				Seat tmpSeat = new Seat();
+			{;
 				JButton tmpBtn = new JButton(Integer.toString(c+cols*r));
 				tmpBtn.setBounds(startPosX + c * (width+margins), startPosY + r* (height + margins), width, height);
 				tmpBtn.setEnabled(false);
 				tmpBtn.setBackground(Color.gray);
-				tabtickets.add(tmpBtn);
-				tmpSeat.button = tmpBtn;
-				seats.add(tmpSeat);
+				tabTickets.add(tmpBtn);
+				seats.add(tmpBtn);
 			}
 				
 		}

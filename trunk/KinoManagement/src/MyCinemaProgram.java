@@ -3,15 +3,22 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+
 import javax.swing.BoxLayout;
+
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class MyCinemaProgram extends JApplet
@@ -33,6 +40,9 @@ public class MyCinemaProgram extends JApplet
 	public JPanel loginPanelSeller;
 	public JPanel loginPanelCustomer;
 	
+	
+	//Add new user form
+	ArrayList<JTextField> addUserForm = new ArrayList<JTextField>();
 	public void init()
 	{ 
 		try
@@ -171,5 +181,84 @@ public class MyCinemaProgram extends JApplet
 			}
 		};
 		buttonPickCustomer.addActionListener(pickCustomerAction);
+		
+		JButton btnNewUser = new JButton();
+		btnNewUser.setText("Create user");
+		btnNewUser.setBounds(325, 180, 150, 40);
+		ActionListener addUserAction = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JPanel addUserPanel = CreateNewUserPane();
+				
+				int result = JOptionPane.showConfirmDialog(null, addUserPanel, "Enter login and password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				if(result == JOptionPane.OK_OPTION)
+				{					
+					System.out.println("Creation of a new user performed");
+					UsersRow tmpUser = new UsersRow();
+					tmpUser.user_login = addUserForm.get(0).getText();
+					
+					tmpUser.user_login = addUserForm.get(0).getText();
+					tmpUser.user_pass = addUserForm.get(1).getText();
+					tmpUser.user_type = "CUSTOMER";
+					tmpUser.user_name = addUserForm.get(2).getText();
+					tmpUser.user_surname = addUserForm.get(3).getText();
+					tmpUser.user_age = Integer.parseInt(addUserForm.get(4).getText());
+					
+					myCinemaController.AddUser(tmpUser);
+				}
+				else
+				{
+						
+				}
+			}
+		};
+		btnNewUser.addActionListener(addUserAction);
+		pickUserType.add(btnNewUser);
+		
+		
+	}
+	
+	private JPanel CreateNewUserPane()
+	{
+		int tfWidth = 100, tfHeight = 25;
+		JPanel result = new JPanel();
+		result.setLayout(new GridLayout(5,  2));
+		addUserForm.clear();
+		
+		String[] tfValues = new String[] {
+				"Login", 
+				"Password",
+				"Name", 
+				"Surname", 
+				"Age"};
+		
+		for (int i = 0; i < tfValues.length; i++)
+		{
+			result.add(CreateLabel(tfValues[i], 0, 0, tfWidth, tfHeight));
+			JTextField tmpField = CreateTextField("", 0, 0, tfWidth, tfHeight);
+			addUserForm.add(tmpField);
+			result.add(tmpField);
+			
+		}
+		
+
+		
+		return result;
+	}
+	
+	private JLabel CreateLabel(String text, int x, int y, int width, int height)
+	{
+		JLabel result = new JLabel();
+		result.setBounds(x, y, width, height);
+		result.setText(text);
+		return result;
+	}
+	
+	private JTextField CreateTextField(String text, int x, int y, int width, int height)
+	{
+		JTextField result = new JTextField();
+		result.setBounds(x, y, width, height);
+		result.setText(text);
+		return result;
 	}
 }
