@@ -8,6 +8,7 @@ public class FinancialsRow
 	public Timestamp financials_date;
 	public String financials_type;
 	public String financials_description;
+	
 	public FinancialsRow()
 	{
 	}

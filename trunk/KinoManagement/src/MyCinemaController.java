@@ -608,4 +608,53 @@ public class MyCinemaController
 		}
 		return tmpArray;
 	}
+	public boolean UpdateFinancial(FinancialsRow financialsRow)
+	{
+		try
+		{
+			String sql = "UPDATE 08692495_0000005.financials" +
+						" SET financials_value='" + financialsRow.financials_value + "'"+
+						", financials_date='" + financialsRow.financials_date + "'"+
+						", financials_type='" + financialsRow.financials_type + "'"+
+						", financials_description='" + financialsRow.financials_description + "'"+
+						" WHERE financials_id='" + financialsRow.financials_id + "'";
+			statement.executeUpdate(sql);
+			return true;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
+	}
+	public boolean AddFinancials(FinancialsRow financialsRow)
+	{
+		try
+		{
+			String sql = "INSERT INTO 08692495_0000005.financials (financials_value,financials_date,financials_type,financials_description)" +
+						" VALUES ('" + financialsRow.financials_value + "','" + financialsRow.financials_date + "','" + financialsRow.financials_type + "','" + financialsRow.financials_description + "')";
+			statement.execute(sql);
+			return true;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
+	}
+	public boolean DeleteFinancials(int financials_id)
+	{
+		try
+		{
+			String sql = "DELETE FROM 08692495_0000005.financials" +
+						" WHERE financials_id='" + financials_id + "'"; 
+			statement.execute(sql);
+			return true;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
+	}
 }

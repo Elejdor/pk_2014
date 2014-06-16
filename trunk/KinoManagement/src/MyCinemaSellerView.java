@@ -103,7 +103,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JComboBox<String> financials_type;
 	public JTextField financials_description;
 	public JButton financials_buttonDeselect;
-	public JButton financials_buttonRemove;
+	public JButton financials_buttonDelete;
 	public JButton financials_buttonUpdate;
 	public JButton financials_buttonAdd;
 	
@@ -1270,7 +1270,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		tabFinancials.add(financials_description);
 		
 		this.financials_buttonDeselect = new JButton("Deselect");
-		this.financials_buttonDeselect.setBounds(520, 200, 100, 20);
+		this.financials_buttonDeselect.setBounds(550, 171, 100, 20);
 		tabFinancials.add(financials_buttonDeselect);
 		ActionListener actionDeselect = new ActionListener() 
 		{
@@ -1282,7 +1282,126 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		this.financials_buttonDeselect.addActionListener(actionDeselect);
 		
 		this.financials_buttonUpdate = new JButton("Update");
-		this.financials_buttonUpdate.setBounds(620, 240, 100, 20);
+		this.financials_buttonUpdate.setBounds(650, 171, 100, 20);
 		tabFinancials.add(financials_buttonUpdate);
+		ActionListener actionUpdate = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+				{
+					try
+					{
+						FinancialsRow tmpRow = MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex());
+						tmpRow.financials_value = Double.parseDouble(MyCinemaSellerView.sellerView.financials_value.getText());
+						tmpRow.financials_date = Timestamp.valueOf(MyCinemaSellerView.sellerView.financials_date.getText());
+						tmpRow.financials_type = String.valueOf(MyCinemaSellerView.sellerView.financials_type.getSelectedItem());
+						tmpRow.financials_description = MyCinemaSellerView.sellerView.financials_description.getText();
+						MyCinemaSellerView.sellerView.myCinemaController.UpdateFinancial(tmpRow);
+						if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+						{
+							MyCinemaSellerView.sellerView.financials_value.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_value));
+							MyCinemaSellerView.sellerView.financials_date.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_date));
+							MyCinemaSellerView.sellerView.financials_type.setSelectedItem(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_type));
+							MyCinemaSellerView.sellerView.financials_description.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_description));
+							
+						}else{
+							MyCinemaSellerView.sellerView.financials_value.setText("");
+							MyCinemaSellerView.sellerView.financials_date.setText("");
+							MyCinemaSellerView.sellerView.financials_type.setSelectedItem("LICENCE");
+							MyCinemaSellerView.sellerView.financials_description.setText("");
+						}
+						MyCinemaSellerView.sellerView.financialList = MyCinemaSellerView.sellerView.myCinemaController.GetFinancialsList();
+						MyCinemaSellerView.sellerView.financials_financialList.setListData(MyCinemaController.FinancialsRowListToArray(MyCinemaSellerView.sellerView.financialList));
+					}
+					catch(Exception en)
+					{
+						JOptionPane.showMessageDialog(null, en.getMessage());
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Select financial you want to update");
+				}
+			}
+		};
+		this.financials_buttonUpdate.addActionListener(actionUpdate);
+		
+		this.financials_buttonAdd = new JButton("Add");
+		this.financials_buttonAdd.setBounds(650, 202, 100, 20);
+		tabFinancials.add(financials_buttonAdd);
+		ActionListener actionAdd = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() == -1)
+				{
+					FinancialsRow tmpRow = new FinancialsRow();
+					tmpRow.financials_id = -1;
+					tmpRow.financials_value = Double.parseDouble(MyCinemaSellerView.sellerView.financials_value.getText());
+					tmpRow.financials_date = Timestamp.valueOf(MyCinemaSellerView.sellerView.financials_date.getText());
+					tmpRow.financials_type = String.valueOf(MyCinemaSellerView.sellerView.financials_type.getSelectedItem());
+					tmpRow.financials_description = MyCinemaSellerView.sellerView.financials_description.getText();
+					MyCinemaSellerView.sellerView.myCinemaController.AddFinancials(tmpRow);
+					if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+					{
+						MyCinemaSellerView.sellerView.financials_value.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_value));
+						MyCinemaSellerView.sellerView.financials_date.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_date));
+						MyCinemaSellerView.sellerView.financials_type.setSelectedItem(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_type));
+						MyCinemaSellerView.sellerView.financials_description.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_description));
+						
+					}else{
+						MyCinemaSellerView.sellerView.financials_value.setText("");
+						MyCinemaSellerView.sellerView.financials_date.setText("");
+						MyCinemaSellerView.sellerView.financials_type.setSelectedItem("LICENCE");
+						MyCinemaSellerView.sellerView.financials_description.setText("");
+					}
+					MyCinemaSellerView.sellerView.financialList = MyCinemaSellerView.sellerView.myCinemaController.GetFinancialsList();
+					MyCinemaSellerView.sellerView.financials_financialList.setListData(MyCinemaController.FinancialsRowListToArray(MyCinemaSellerView.sellerView.financialList));
+				}else{
+					JOptionPane.showMessageDialog(null, "Deselect to add new financial");
+				}
+			}
+		};
+		this.financials_buttonAdd.addActionListener(actionAdd);
+		
+		this.financials_buttonDelete = new JButton("Delete");
+		this.financials_buttonDelete.setBounds(550, 202, 100, 20);
+		tabFinancials.add(financials_buttonDelete);
+		ActionListener actionDelete = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+				{
+					String msg  = new String();
+					msg += "Do you really want to delete financial?\n";
+					msg += MyCinemaSellerView.sellerView.financials_financialList.getSelectedValue() + "\n";
+					int answer = JOptionPane.showConfirmDialog(null,msg , "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+					if(answer == JOptionPane.YES_OPTION)
+					{
+						int id = MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_id;
+						MyCinemaSellerView.sellerView.myCinemaController.DeleteFinancials(id);
+						//update list
+						if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+						{
+							MyCinemaSellerView.sellerView.financials_value.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_value));
+							MyCinemaSellerView.sellerView.financials_date.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_date));
+							MyCinemaSellerView.sellerView.financials_type.setSelectedItem(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_type));
+							MyCinemaSellerView.sellerView.financials_description.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_description));
+							
+						}else{
+							MyCinemaSellerView.sellerView.financials_value.setText("");
+							MyCinemaSellerView.sellerView.financials_date.setText("");
+							MyCinemaSellerView.sellerView.financials_type.setSelectedItem("LICENCE");
+							MyCinemaSellerView.sellerView.financials_description.setText("");
+						}
+						MyCinemaSellerView.sellerView.financialList = MyCinemaSellerView.sellerView.myCinemaController.GetFinancialsList();
+						MyCinemaSellerView.sellerView.financials_financialList.setListData(MyCinemaController.FinancialsRowListToArray(MyCinemaSellerView.sellerView.financialList));
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Select financial to delete.");
+				}
+			}
+		};
+		this.financials_buttonDelete.addActionListener(actionDelete);
 	}
 }
