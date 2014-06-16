@@ -102,6 +102,10 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JTextField financials_date;
 	public JComboBox<String> financials_type;
 	public JTextField financials_description;
+	public JButton financials_buttonDeselect;
+	public JButton financials_buttonRemove;
+	public JButton financials_buttonUpdate;
+	public JButton financials_buttonAdd;
 	
 	//tabs
 	public JPanel tabUsers;
@@ -1211,10 +1215,20 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			{
 				if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
 				{
+					MyCinemaSellerView.sellerView.financials_value.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_value));
+					MyCinemaSellerView.sellerView.financials_date.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_date));
+					MyCinemaSellerView.sellerView.financials_type.setSelectedItem(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_type));
+					MyCinemaSellerView.sellerView.financials_description.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_description));
 					
+				}else{
+					MyCinemaSellerView.sellerView.financials_value.setText("");
+					MyCinemaSellerView.sellerView.financials_date.setText("");
+					MyCinemaSellerView.sellerView.financials_type.setSelectedItem("LICENCE");
+					MyCinemaSellerView.sellerView.financials_description.setText("");
 				}
 			}
 		};
+		this.financials_financialList.addListSelectionListener(actionIndexChanged_financials);
 		
 		JLabel financials_value_label = new JLabel("Value:");
 		financials_value_label.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -1254,5 +1268,21 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		this.financials_description = new JTextField();
 		this.financials_description.setBounds(550, 140, 200, 20);
 		tabFinancials.add(financials_description);
+		
+		this.financials_buttonDeselect = new JButton("Deselect");
+		this.financials_buttonDeselect.setBounds(520, 200, 100, 20);
+		tabFinancials.add(financials_buttonDeselect);
+		ActionListener actionDeselect = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				MyCinemaSellerView.sellerView.financials_financialList.clearSelection();
+			}
+		};
+		this.financials_buttonDeselect.addActionListener(actionDeselect);
+		
+		this.financials_buttonUpdate = new JButton("Update");
+		this.financials_buttonUpdate.setBounds(620, 240, 100, 20);
+		tabFinancials.add(financials_buttonUpdate);
 	}
 }
