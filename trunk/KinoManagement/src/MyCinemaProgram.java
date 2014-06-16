@@ -67,8 +67,8 @@ public class MyCinemaProgram extends JApplet
 	private void InitializePanels()
 	{
 		InitializePickUserType();
-		sellerView = new MyCinemaSellerView(myCinemaController);
-		customerView = new MyCinemaCustomerView(myCinemaController);
+		
+		
 	}
 	
 	public void InitializePickUserType()
@@ -112,10 +112,14 @@ public class MyCinemaProgram extends JApplet
 				loginPanelSeller.add(new JLabel("Password:"));
 				loginPanelSeller.add(passFieldSeller);
 				int result = JOptionPane.showConfirmDialog(null, loginPanelSeller, "Enter login and password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				
 				if(result == JOptionPane.OK_OPTION)
 				{
 					if( MyCinemaProgram.program.myCinemaController.loginSeller(loginFieldSeller.getText(), passFieldSeller.getText()) )
+					{
+						sellerView = new MyCinemaSellerView(myCinemaController);
 						MyCinemaProgram.program.setContentPane(MyCinemaProgram.program.sellerView);
+					}
 					else
 						JOptionPane.showMessageDialog(null, "Incorrect login or password.");
 				}
@@ -123,6 +127,7 @@ public class MyCinemaProgram extends JApplet
 				{
 					
 				}
+				
 			}
 		};
 		buttonPickSeller.addActionListener(pickSellerAction);
@@ -146,10 +151,16 @@ public class MyCinemaProgram extends JApplet
 				loginPanelSeller.add(new JLabel("Password:"));
 				loginPanelSeller.add(passFieldSeller);
 				int result = JOptionPane.showConfirmDialog(null, loginPanelSeller, "Enter login and password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				
+				
 				if(result == JOptionPane.OK_OPTION)
 				{
+					
 					if( MyCinemaProgram.program.myCinemaController.loginCustomer(loginFieldSeller.getText(), passFieldSeller.getText()) )
+					{
+						customerView = new MyCinemaCustomerView(myCinemaController);
 						MyCinemaProgram.program.setContentPane(MyCinemaProgram.program.customerView);
+					}
 					else
 						JOptionPane.showMessageDialog(null, "Incorrect login or password.");
 				}

@@ -34,8 +34,8 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 	private MyCinemaController myCinemaController;
 	
 	private JPanel tabtickets;
-	private JPanel tabMovies;
-	private JPanel tabShows;
+	private JPanel tabProfile;
+	
 	private JPanel tabTickets;
 	private JPanel tabFinancials;
 	
@@ -68,11 +68,12 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		jTabbedPane.setBounds(tabRectangle);
 
 		initializeTabTickets(jTabbedPane);
-		initializeTabShows(jTabbedPane);
+		initializeTabProfile(jTabbedPane);
 		initializeTabFinancials(jTabbedPane);
 		
 		this.add(jTabbedPane);
 	}
+	
 	private void initializeTabTickets(JTabbedPane jTabbedPane)
 	{
 		tabtickets = new JPanel();
@@ -140,13 +141,21 @@ public class MyCinemaCustomerView extends CinemaContentPanel
 		
 		
 	}
-	private void initializeTabShows(JTabbedPane jTabbedPane)
+	
+	private void initializeTabProfile(JTabbedPane jTabbedPane)
 	{
-		tabShows = new JPanel();
-		tabShows.setName("Shows");
-		tabShows.setBackground(this.getBackground().brighter());
-		jTabbedPane.add(tabShows);
+		tabProfile = new JPanel();
+		tabProfile.setName("My profile");
+		tabProfile.setLayout(null);
+		tabProfile.setBackground(this.getBackground().brighter());
+		jTabbedPane.add(tabProfile);
+		
+		JTextField userName = new JTextField();
+		userName.setBounds(50, 50, 200, 25);
+		UsersRow usr = myCinemaController.GetUser(myCinemaController.logged_user_id);
+		tabProfile.add(userName);
 	}
+	
 	private void initializeTabFinancials(JTabbedPane jTabbedPane)
 	{
 		tabFinancials = new JPanel();
