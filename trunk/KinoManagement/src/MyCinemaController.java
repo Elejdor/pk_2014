@@ -662,7 +662,7 @@ public class MyCinemaController
 	{
 		try 
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT MONTH(financials_date), SUM(financials_value) FROM 08692495_0000005.financials WHERE YEAR(financials.financials_date)='" + year + "' ORDER BY financials.financials_date");
+			ResultSet resultSet = statement.executeQuery("SELECT MONTH(financials_date), SUM(financials_value) FROM 08692495_0000005.financials WHERE YEAR(financials.financials_date)='" + year + "' GROUP BY MONTH(financials.financials_date) ORDER BY financials.financials_date");
 			int count = 0;
 			ChartItem tmp = new ChartItem();
 			
