@@ -1419,13 +1419,14 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		tabChart.setBackground(this.getBackground().brighter());
 		jTabbedPane.add(tabChart);
 		
-		this.chart_panel = new JPanel();
-		this.chart_panel.setBounds(10, 10, 775, 320);
-		tabChart.add(chart_panel);
+		this.chart_panel = null;
+		//this.chart_panel.setBounds(10, 10, 775, 320);
+		//tabChart.add(chart_panel);
 		
 		JLabel chartLabel = new JLabel("Enter year");
-		chartLabel.setBounds(250, 370, 90, 20);
+		chartLabel.setBounds(250, 340, 90, 20);
 		chartLabel.setVisible(true);
+		tabChart.add(chartLabel);
 		this.chart_year = new JTextField();
 		this.chart_year.setBounds(350, 340, 100, 20);
 		this.chart_year.setVisible(true);
@@ -1450,9 +1451,14 @@ public class MyCinemaSellerView extends CinemaContentPanel
 						xs[i] = tmpList[i].x;
 						ys[i] = tmpList[i].y;
 					}
-					JPanel tmpPanel = new LineChart(xs,"Months",ys,"","Financials",MyCinemaSellerView.sellerView.chart_panel.getWidth(),MyCinemaSellerView.sellerView.chart_panel.getHeight(),MyCinemaSellerView.sellerView.chart_panel.getBackground().darker());
-					MyCinemaSellerView.sellerView.chart_panel.add(tmpPanel);
-					MyCinemaSellerView.sellerView.chart_panel.setVisible(true);
+					if(MyCinemaSellerView.sellerView.chart_panel != null)
+						MyCinemaSellerView.sellerView.tabChart.remove(MyCinemaSellerView.sellerView.chart_panel);
+					MyCinemaSellerView.sellerView.chart_panel = new LineChart(xs,"Months",ys,"","Financials",760,320,MyCinemaSellerView.sellerView.tabChart.getBackground().darker());
+					MyCinemaSellerView.sellerView.chart_panel.setBounds(10, 10, 760, 320);
+					MyCinemaSellerView.sellerView.tabChart.add(MyCinemaSellerView.sellerView.chart_panel);
+					//MyCinemaSellerView.sellerView.chart_panel.add(tmpPanel);
+					//MyCinemaSellerView.sellerView.chart_panel.setVisible(true);
+					MyCinemaSellerView.sellerView.tabChart.revalidate();
 				}else{
 					JOptionPane.showMessageDialog(null, "Enter valid year");
 				}

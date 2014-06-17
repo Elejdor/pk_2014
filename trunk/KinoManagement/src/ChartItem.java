@@ -5,7 +5,8 @@ public class ChartItem
 	double y; //value of spendings in this month
 	public ChartItem()
 	{
-		
+		this.x = 0.0;
+		this.y = 0.0;
 	}
 	public ChartItem(double x, double y)
 	{

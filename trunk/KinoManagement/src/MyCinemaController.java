@@ -680,7 +680,18 @@ public class MyCinemaController
 					tmpList[i] = new ChartItem(i+1,0.0);
 				}
 			}
-			return tmpList;
+			//now sum it up
+			ChartItem[] tmpList2 = new ChartItem[12];
+			for(int i = 0;i < 12;i++)
+			{
+				tmpList2[i] = new ChartItem(i+1,0.0);
+				for(int j = 0;j < i;j++)
+				{
+					tmpList2[i].y += tmpList[j].y; 
+				}
+			}
+			
+			return tmpList2;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
