@@ -10,7 +10,8 @@ public class CinemaContentPanel extends JPanel
 	public CinemaContentPanel() 
 	{
 		this.setVisible(true);
-		this.setBackground(new Color(0.5f,0.9f,0.5f));
+		//this.setBackground(new Color(0.5f,0.9f,0.5f));
+		this.setBackground(new Color(0.6f,0.6f,0.6f));
 		this.setSize(800, 430);
 		this.setLayout(null);
 	}
