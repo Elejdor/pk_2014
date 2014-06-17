@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -12,11 +14,13 @@ import java.security.*;
 import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.NonRegisteringDriver;
+import com.thoughtworks.xstream.XStream;
 
 public class MyCinemaController 
 {
 	private Connection con;
 	private Statement statement;
+	private XStream xstream;
 	
 	public int logged_user_id;
 	public String logged_user_type;
@@ -28,6 +32,7 @@ public class MyCinemaController
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://sql.devspot.home.pl","08692495_0000005","kompo123");
 			statement = con.createStatement();
+			xstream = new XStream();
 			logged_user_id = -1;
 			logged_user_type = "";
 		}
@@ -695,6 +700,36 @@ public class MyCinemaController
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public void SaveRepertoireToXML(String fileName)
+	{
+		try
+		{
+			String sql = "SELECT movies.movie_title,shows.show_date,movies.movie_price FROM 08692495_0000005.shows LEFT JOIN 08692495_0000005.movies ON shows.show_movie_id=movies.movie_id ";
+			ResultSet results = statement.executeQuery(sql);
+			boolean condition = true;
+			ArrayList<Show> shows = new ArrayList<Show>();
+			while(results.next())
+			{
+				shows.add(new Show(results.getString(1),results.getTimestamp(2),results.getDouble(3)));
+			}
+			Repertoire repertoire = new Repertoire();
+			repertoire.showList = shows;
+
+			String xml = new String();
+			xml = xstream.toXML(repertoire);
+				File file = new File(fileName);
+				FileWriter writer = new FileWriter(file);
+				writer.write(xml);
+				writer.close();
+			
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
+
 		}
 	}
 }

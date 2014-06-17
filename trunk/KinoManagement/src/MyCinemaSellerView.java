@@ -73,6 +73,8 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JButton shows_buttonDeselectShow;
 	public JButton shows_buttonUpdate;
 	public JButton shows_buttonAdd;
+	public JButton shows_buttonToXml;
+	public JTextField shows_fileName;
 	
 	//tickets tab
 	public JScrollPane tickets_shows_scrollList;
@@ -871,6 +873,28 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			}
 		};
 		shows_buttonDelete.addActionListener(actionDelete);
+		
+		this.shows_buttonToXml = new JButton("ToXml");
+		this.shows_buttonToXml.setBounds(350, 340, 100, 20);
+		this.tabShows.add(shows_buttonToXml);
+		
+		this.shows_fileName = new JTextField();
+		this.shows_fileName.setBounds(350, 320, 100, 20);
+		this.tabShows.add(shows_fileName);
+		
+		ActionListener actionToXml = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if(!MyCinemaSellerView.sellerView.shows_fileName.getText().equals(""))
+				{
+					MyCinemaSellerView.sellerView.myCinemaController.SaveRepertoireToXML(MyCinemaSellerView.sellerView.shows_fileName.getText());
+				}else{
+					JOptionPane.showMessageDialog(null, "Type in filename");
+				}
+			}
+		};
+		this.shows_buttonToXml.addActionListener(actionToXml);
 	}
 	private void initializeTabTickets(JTabbedPane jTabbedPane)
 	{
