@@ -15,7 +15,13 @@ import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.NonRegisteringDriver;
 import com.thoughtworks.xstream.XStream;
-
+/** 
+ * MyCinemaController is our main controller class.
+ * It is responsible for every logic advanced operation.
+ * It includes:
+ * SQL queries to database
+ * serialization
+ * loggin in and out for customers and sellers*/
 public class MyCinemaController 
 {
 	private Connection con;
@@ -25,6 +31,10 @@ public class MyCinemaController
 	public int logged_user_id;
 	public String logged_user_type;
 	
+	/** 
+	 * The is constructor for controller class it initializes every
+	 * important object that is used in methods
+	 * also initilizes logging system*/
 	public MyCinemaController()
 	{
 		try
@@ -41,6 +51,8 @@ public class MyCinemaController
 			System.out.println("Couldn't connect to database...");
 		}
 	}
+	/** 
+	 * Method responsible for logging and administrating seller*/
 	public boolean loginSeller(String login, String pass)
 	{
 		try 
@@ -74,6 +86,8 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	/** 
+	 * Method responsible for logging as customer*/
 	public boolean loginCustomer(String login, String pass)
 	{
 		try 
@@ -107,12 +121,16 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	/** 
+	 * Method responsible for logging out*/
 	public boolean logOut()
 	{
 		logged_user_id = -1;
 		logged_user_type = "";
 		return true;
 	}
+	/** 
+	 * Password hashing method, not used*/
 	public static String Hash(String input)
 	{
 		MessageDigest stringHasher = null;
@@ -130,6 +148,8 @@ public class MyCinemaController
 	}
 
 	//users
+	/** 
+	 * Method responsible for getting list of usersRow records from database*/
 	public ArrayList<UsersRow> GetUsersList()
 	{
 		try 
@@ -151,6 +171,9 @@ public class MyCinemaController
 		}
 		
 	}
+	
+	/** 
+	 * Method responsible for getting one usersRow records from database via given user_id*/
 	public UsersRow GetUser(int user_id)
 	{
 		try {
@@ -187,6 +210,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for adding user to database*/
 	public boolean AddUser(UsersRow usersRow)
 	{
 		try
@@ -203,6 +229,8 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	/** 
+	 * Method responsible for deleting user from database*/
 	public boolean DeleteUser(int user_id)
 	{
 		try
@@ -218,6 +246,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for converting array of type UsersRow to String*/
 	public static String[] UsersRowListToArray(ArrayList<UsersRow> list)
 	{
 		String[] tmpArray = new String[list.size()];
@@ -229,6 +260,8 @@ public class MyCinemaController
 	}
 	
 	//movies
+	/** 
+	 * Method responsible for getting list of moviesRow records from database*/
 	public ArrayList<MoviesRow> GetMoviesList()
 	{
 		try 
@@ -249,6 +282,9 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	
+	/** 
+	 * Method responsible for converting array of type MoviesRow to String*/
 	public static String[] MoviesRowListToArray(ArrayList<MoviesRow> list)
 	{
 		String[] tmpArray = new String[list.size()];
@@ -258,6 +294,9 @@ public class MyCinemaController
 		}
 		return tmpArray;
 	}
+	
+	/** 
+	 * Method responsible for updating movies table*/
 	public boolean UpdateMovie(MoviesRow moviesRow)
 	{
 		try
@@ -280,6 +319,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for adding moviesRow to database*/
 	public boolean AddMovie(MoviesRow movieRow)
 	{
 		try
@@ -296,6 +338,8 @@ public class MyCinemaController
 		}
 	}
 	
+	/** 
+	 * Method responsible for deleting movie from database by mobie_id*/
 	public boolean DeleteMovie(int movie_id)
 	{
 		try
@@ -313,6 +357,8 @@ public class MyCinemaController
 	}
 	
 	//shows
+	/** 
+	 * Method responsible for getting list of showsRow records from database*/
 	public ArrayList<ShowsRow> GetShowsList()
 	{
 		try 
@@ -334,6 +380,9 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	
+	/** 
+	 * Method responsible for getting ShowsRow arraylist by given movie_id */
 	public ArrayList<ShowsRow> GetShowsList(int movie_id)
 	{
 		try 
@@ -356,6 +405,8 @@ public class MyCinemaController
 		}
 	}
 	
+	/** 
+	 * Method responsible for converting ArrayList of type ShowsRow to array of Strings */
 	public static String[] ShowsRowListToArray(ArrayList<ShowsRow> list)
 	{
 		String[] tmpArray = new String[list.size()];
@@ -365,6 +416,9 @@ public class MyCinemaController
 		}
 		return tmpArray;
 	}
+	
+	/** 
+	 * Method responsible for adding new show to database */
 	public boolean AddShow(ShowsRow showRow)
 	{
 		try
@@ -380,6 +434,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for updating ShowsRow in the database */
 	public boolean UpdateShow(ShowsRow showsRow)
 	{
 		try
@@ -399,6 +456,8 @@ public class MyCinemaController
 		}
 	}
 	
+	/** 
+	 * Method responsible for deleting ShowsRow from the database */
 	public boolean DeleteShow(int show_id)
 	{
 		try
@@ -416,6 +475,8 @@ public class MyCinemaController
 	}
 	
 	//tickets
+	/** 
+	 * Method responsible for getting list of ticketsRow records from database*/
 	public ArrayList<TicketsRow> GetTicketsList(int show_id)
 	{
 		try 
@@ -437,6 +498,9 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	
+	/** 
+	 * Method responsible for getting Tickets arraylist from the database */
 	public ArrayList<TicketsRow> GetTicketsList()
 	{
 		try 
@@ -458,6 +522,9 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	
+	/** 
+	 * Method responsible for getting TicketsRow arraylist by given movie_id */
 	public ArrayList<TicketsRow> GetTicketsListForMovie(int movie_id)
 	{
 		try 
@@ -479,6 +546,9 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	
+	/** 
+	 * Method responsible for converting ArrayList fo type Tickets to to array of String */
 	public static String[] TicketsRowListToArray(ArrayList<TicketsRow> list)
 	{
 		String[] tmpArray = new String[list.size()];
@@ -488,6 +558,9 @@ public class MyCinemaController
 		}
 		return tmpArray;
 	}
+	
+	/** 
+	 * Method responsible for updating Ticket in the database */
 	public int UpdateTicket(TicketsRow ticketsRow, int oldSeatNumber)
 	{
 		try
@@ -513,6 +586,9 @@ public class MyCinemaController
 			return 1;
 		}
 	}
+	
+	/** 
+	 * Method responsible for updating Ticket in the database, but only ticket state*/
 	public int UpdateTicket(int ticket_id, String ticket_state)
 	{
 		try
@@ -529,6 +605,9 @@ public class MyCinemaController
 			return 1;
 		}
 	}
+	
+	/** 
+	 * Method responsible for updating Ticket's state in the database */
 	public boolean CheckTicketSeatAvalible(int show_id, int seat_number)
 	{
 		try
@@ -551,6 +630,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for deleting Ticket from the database */
 	public boolean DeleteTicket(int ticket_id)
 	{
 		try
@@ -567,6 +649,8 @@ public class MyCinemaController
 		}
 	}
 	
+	/** 
+	 * Method responsible for adding Ticket to the database */
 	public int AddTicket(TicketsRow ticketsRow)
 	{
 		try
@@ -583,6 +667,9 @@ public class MyCinemaController
 		}
 	}
 	
+	//financials
+	/** 
+	 * Method responsible for getting list of financialsRow records from database*/
 	public ArrayList<FinancialsRow> GetFinancialsList()
 	{
 		try 
@@ -604,6 +691,9 @@ public class MyCinemaController
 			return null;
 		}
 	}
+	
+	/** 
+	 * Method responsible for converting Arrayist of type RinancialsRow to Array of String */
 	public static String[] FinancialsRowListToArray(ArrayList<FinancialsRow> list)
 	{
 		String[] tmpArray = new String[list.size()];
@@ -632,6 +722,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for adding financials to the database */
 	public boolean AddFinancials(FinancialsRow financialsRow)
 	{
 		try
@@ -647,6 +740,9 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	/** 
+	 * Method responsible for deleting financials from the database */
 	public boolean DeleteFinancials(int financials_id)
 	{
 		try
@@ -663,6 +759,8 @@ public class MyCinemaController
 		}
 	}
 	
+	/** 
+	 * Method responsible for getting data for chart file by chosen year */
 	public ChartItem[] GetMonthlyFinancials(String year)
 	{
 		try 
@@ -703,6 +801,8 @@ public class MyCinemaController
 		}
 	}
 	
+	/** 
+	 * Method responsible for saving repertoire to xml file*/
 	public void SaveRepertoireToXML(String fileName)
 	{
 		try
