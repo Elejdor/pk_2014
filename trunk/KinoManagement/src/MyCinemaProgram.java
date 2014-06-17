@@ -40,6 +40,8 @@ public class MyCinemaProgram extends JApplet
 	public JPanel loginPanelSeller;
 	public JPanel loginPanelCustomer;
 	
+	private ActionListener loginSeller;
+	private ActionListener loginCustomer;
 	
 	//Add new user form
 	ArrayList<JTextField> addUserForm = new ArrayList<JTextField>();
@@ -67,18 +69,18 @@ public class MyCinemaProgram extends JApplet
 		MyCinemaProgram.program = this;
 		myCinemaController = new MyCinemaController();
 		
-		this.setSize(800, 400);
+		this.setSize(800, 430);
 		this.getContentPane().setLayout(null);
 		
 		this.InitializePanels();
+		
+		this.InitializeMenuBar();
 		
 		this.setContentPane(pickUserType);
 	}
 	private void InitializePanels()
 	{
 		InitializePickUserType();
-		
-		
 	}
 	
 	public void InitializePickUserType()
@@ -109,7 +111,7 @@ public class MyCinemaProgram extends JApplet
 		pickUserType.add(labelUserType);
 		
 		
-		ActionListener pickSellerAction = new ActionListener() {
+		loginSeller = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//check if login-pass is a match
 				//for now
@@ -129,6 +131,8 @@ public class MyCinemaProgram extends JApplet
 					{
 						sellerView = new MyCinemaSellerView(myCinemaController);
 						MyCinemaProgram.program.setContentPane(MyCinemaProgram.program.sellerView);
+						MyCinemaProgram.program.InitializeMenuBar();
+						MyCinemaProgram.program.getContentPane().revalidate();
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Incorrect login or password.");
@@ -140,7 +144,7 @@ public class MyCinemaProgram extends JApplet
 				
 			}
 		};
-		buttonPickSeller.addActionListener(pickSellerAction);
+		buttonPickSeller.addActionListener(loginSeller);
 		
 		loginPanelCustomer = new JPanel();
 		JTextField loginField = new JTextField();
@@ -150,7 +154,7 @@ public class MyCinemaProgram extends JApplet
 		loginPanelCustomer.add(loginField);
 		loginPanelCustomer.add(new JLabel("Password:"));
 		loginPanelCustomer.add(passField);
-		ActionListener pickCustomerAction = new ActionListener() {
+		this.loginCustomer = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JPanel loginPanelSeller = new JPanel();
 				JTextField loginFieldSeller = new JTextField();
@@ -170,6 +174,8 @@ public class MyCinemaProgram extends JApplet
 					{
 						customerView = new MyCinemaCustomerView(myCinemaController);
 						MyCinemaProgram.program.setContentPane(MyCinemaProgram.program.customerView);
+						MyCinemaProgram.program.InitializeMenuBar();
+						MyCinemaProgram.program.getContentPane().revalidate();
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Incorrect login or password.");
@@ -180,7 +186,7 @@ public class MyCinemaProgram extends JApplet
 				}
 			}
 		};
-		buttonPickCustomer.addActionListener(pickCustomerAction);
+		buttonPickCustomer.addActionListener(loginCustomer);
 		
 		JButton btnNewUser = new JButton();
 		btnNewUser.setText("Create user");
@@ -260,5 +266,57 @@ public class MyCinemaProgram extends JApplet
 		result.setBounds(x, y, width, height);
 		result.setText(text);
 		return result;
+	}
+	
+	public void InitializeMenuBar()
+	{
+		JMenuBar bar = new JMenuBar();
+		bar.setVisible(true);
+		this.setJMenuBar(bar);
+		JMenu file = new JMenu("File");
+		JMenuItem about = new JMenuItem("About");
+		ActionListener actionAbout = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				JOptionPane.showMessageDialog(null, "Creators:\nFilip Wróbel\n£ukasz Nizik\nver 1.0.0");
+			}
+		};
+		about.addActionListener(actionAbout);
+		file.add(about);
+		
+		JMenu login = new JMenu("Login");
+		JMenuItem loginCustomer = new JMenuItem("Customer");
+		loginCustomer.addActionListener(this.loginCustomer);
+		JMenuItem loginSeller = new JMenuItem("Seller");
+		loginSeller.addActionListener(this.loginSeller);
+		login.add(loginCustomer);
+		login.add(loginSeller);
+		file.add(login);
+		JMenuItem exit = new JMenuItem("Exit");
+		ActionListener actionExit = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				System.exit(0);
+			}
+		};
+		JMenuItem logout = new JMenuItem("Logout");
+		ActionListener actionLogout = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				MyCinemaProgram.program.myCinemaController.logOut();
+				MyCinemaProgram.program.setContentPane(MyCinemaProgram.program.pickUserType);
+				MyCinemaProgram.program.InitializeMenuBar();
+				MyCinemaProgram.program.getContentPane().revalidate();
+			}
+		};
+		logout.addActionListener(actionLogout);
+		login.add(logout);
+		exit.addActionListener(actionExit);
+		file.add(exit);
+		bar.add(file);
+		
 	}
 }
