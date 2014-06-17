@@ -107,7 +107,7 @@ public class MyCinemaProgram extends JApplet
 		labelUserType.setLocation(200, 80);
 		labelUserType.setHorizontalAlignment(SwingConstants.CENTER);
 		labelUserType.setSize(400, 60);
-		labelUserType.setText("Pick application type:");
+		labelUserType.setText("Pick user type:");
 		pickUserType.add(labelUserType);
 		
 		

@@ -1374,28 +1374,35 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			{
 				if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() == -1)
 				{
-					FinancialsRow tmpRow = new FinancialsRow();
-					tmpRow.financials_id = -1;
-					tmpRow.financials_value = Double.parseDouble(MyCinemaSellerView.sellerView.financials_value.getText());
-					tmpRow.financials_date = Timestamp.valueOf(MyCinemaSellerView.sellerView.financials_date.getText());
-					tmpRow.financials_type = String.valueOf(MyCinemaSellerView.sellerView.financials_type.getSelectedItem());
-					tmpRow.financials_description = MyCinemaSellerView.sellerView.financials_description.getText();
-					MyCinemaSellerView.sellerView.myCinemaController.AddFinancials(tmpRow);
-					if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+					try
 					{
-						MyCinemaSellerView.sellerView.financials_value.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_value));
-						MyCinemaSellerView.sellerView.financials_date.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_date));
-						MyCinemaSellerView.sellerView.financials_type.setSelectedItem(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_type));
-						MyCinemaSellerView.sellerView.financials_description.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_description));
-						
-					}else{
-						MyCinemaSellerView.sellerView.financials_value.setText("");
-						MyCinemaSellerView.sellerView.financials_date.setText("");
-						MyCinemaSellerView.sellerView.financials_type.setSelectedItem("LICENCE");
-						MyCinemaSellerView.sellerView.financials_description.setText("");
+						FinancialsRow tmpRow = new FinancialsRow();
+						tmpRow.financials_id = -1;
+						tmpRow.financials_value = Double.parseDouble(MyCinemaSellerView.sellerView.financials_value.getText());
+						tmpRow.financials_date = Timestamp.valueOf(MyCinemaSellerView.sellerView.financials_date.getText());
+						tmpRow.financials_type = String.valueOf(MyCinemaSellerView.sellerView.financials_type.getSelectedItem());
+						tmpRow.financials_description = MyCinemaSellerView.sellerView.financials_description.getText();
+						MyCinemaSellerView.sellerView.myCinemaController.AddFinancials(tmpRow);
+						if(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex() != -1)
+						{
+							MyCinemaSellerView.sellerView.financials_value.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_value));
+							MyCinemaSellerView.sellerView.financials_date.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_date));
+							MyCinemaSellerView.sellerView.financials_type.setSelectedItem(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_type));
+							MyCinemaSellerView.sellerView.financials_description.setText(String.valueOf(MyCinemaSellerView.sellerView.financialList.get(MyCinemaSellerView.sellerView.financials_financialList.getSelectedIndex()).financials_description));
+							
+						}else{
+							MyCinemaSellerView.sellerView.financials_value.setText("");
+							MyCinemaSellerView.sellerView.financials_date.setText("");
+							MyCinemaSellerView.sellerView.financials_type.setSelectedItem("LICENCE");
+							MyCinemaSellerView.sellerView.financials_description.setText("");
+						}
+						MyCinemaSellerView.sellerView.financialList = MyCinemaSellerView.sellerView.myCinemaController.GetFinancialsList();
+						MyCinemaSellerView.sellerView.financials_financialList.setListData(MyCinemaController.FinancialsRowListToArray(MyCinemaSellerView.sellerView.financialList));
 					}
-					MyCinemaSellerView.sellerView.financialList = MyCinemaSellerView.sellerView.myCinemaController.GetFinancialsList();
-					MyCinemaSellerView.sellerView.financials_financialList.setListData(MyCinemaController.FinancialsRowListToArray(MyCinemaSellerView.sellerView.financialList));
+					catch(Exception e)
+					{
+						JOptionPane.showMessageDialog(null, e.getMessage());
+					}
 				}else{
 					JOptionPane.showMessageDialog(null, "Deselect to add new financial");
 				}
