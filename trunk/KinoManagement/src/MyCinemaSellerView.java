@@ -107,12 +107,18 @@ public class MyCinemaSellerView extends CinemaContentPanel
 	public JButton financials_buttonUpdate;
 	public JButton financials_buttonAdd;
 	
+	//chart tab
+	public JTextField chart_year;
+	public JButton chart_draw;
+	public JPanel chart_panel;
+	
 	//tabs
 	public JPanel tabUsers;
 	public JPanel tabMovies;
 	public JPanel tabShows;
 	public JPanel tabTickets;
 	public JPanel tabFinancials;
+	public JPanel tabChart;
 	
 	//initializing
 	public MyCinemaSellerView(MyCinemaController myCinemaController)
@@ -134,6 +140,7 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		initializeTabShows(jTabbedPane);
 		initializeTabTickets(jTabbedPane);
 		initializeTabFinancials(jTabbedPane);
+		initializeTabChart(jTabbedPane);
 		
 		this.add(jTabbedPane);
 	}
@@ -1403,5 +1410,55 @@ public class MyCinemaSellerView extends CinemaContentPanel
 			}
 		};
 		this.financials_buttonDelete.addActionListener(actionDelete);
+	}
+	private void initializeTabChart(JTabbedPane jTabbedPane)
+	{
+		tabChart = new JPanel();
+		tabChart.setName("Chart");
+		tabChart.setLayout(null);
+		tabChart.setBackground(this.getBackground().brighter());
+		jTabbedPane.add(tabChart);
+		
+		this.chart_panel = new JPanel();
+		this.chart_panel.setBounds(10, 10, 775, 320);
+		tabChart.add(chart_panel);
+		
+		JLabel chartLabel = new JLabel("Enter year");
+		chartLabel.setBounds(250, 370, 90, 20);
+		chartLabel.setVisible(true);
+		this.chart_year = new JTextField();
+		this.chart_year.setBounds(350, 340, 100, 20);
+		this.chart_year.setVisible(true);
+		tabChart.add(chart_year);
+		
+		this.chart_draw = new JButton("Draw");
+		this.chart_draw.setBounds(450, 340, 100, 20);
+		this.chart_draw.setVisible(true);
+		tabChart.add(chart_draw);
+		ActionListener actionChart = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if(!MyCinemaSellerView.sellerView.chart_year.getText().equals(""))
+				{
+					ChartItem[] tmpList;
+					tmpList = MyCinemaSellerView.sellerView.myCinemaController.GetMonthlyFinancials(MyCinemaSellerView.sellerView.chart_year.getText());
+					double[] xs = new double[12];
+					double[] ys = new double[12];
+					for(int i = 0;i< 12;i++)
+					{
+						xs[i] = tmpList[i].x;
+						ys[i] = tmpList[i].y;
+					}
+					JPanel tmpPanel = new LineChart(xs,"Months",ys,"","Financials",MyCinemaSellerView.sellerView.chart_panel.getWidth(),MyCinemaSellerView.sellerView.chart_panel.getHeight(),MyCinemaSellerView.sellerView.chart_panel.getBackground().darker());
+					MyCinemaSellerView.sellerView.chart_panel.add(tmpPanel);
+					MyCinemaSellerView.sellerView.chart_panel.setVisible(true);
+				}else{
+					JOptionPane.showMessageDialog(null, "Enter valid year");
+				}
+				
+			}
+		};
+		this.chart_draw.addActionListener(actionChart);
 	}
 }

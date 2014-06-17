@@ -657,4 +657,33 @@ public class MyCinemaController
 			return false;
 		}
 	}
+	
+	public ChartItem[] GetMonthlyFinancials(String year)
+	{
+		try 
+		{
+			ResultSet resultSet = statement.executeQuery("SELECT MONTH(financials_date), SUM(financials_value) FROM 08692495_0000005.financials WHERE YEAR(financials.financials_date)='" + year + "' ORDER BY financials.financials_date");
+			int count = 0;
+			ChartItem tmp = new ChartItem();
+			
+			ChartItem[] tmpList = new ChartItem[12];
+			while(resultSet.next())
+			{
+				count++;
+				tmp = new ChartItem(resultSet.getInt(1),resultSet.getDouble(2));
+				tmpList[(int)tmp.x-1] = tmp;
+			}
+			for(int i = 0;i < 12;i++)
+			{
+				if(tmpList[i] == null)
+				{
+					tmpList[i] = new ChartItem(i+1,0.0);
+				}
+			}
+			return tmpList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
