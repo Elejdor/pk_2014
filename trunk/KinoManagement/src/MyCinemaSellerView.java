@@ -1123,21 +1123,30 @@ public class MyCinemaSellerView extends CinemaContentPanel
 				if(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex() != -1)
 				{
 					int ticket_id = MyCinemaSellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex()).ticket_id;
-					MyCinemaSellerView.sellerView.myCinemaController.DeleteTicket(ticket_id);
-					//update
-					if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
+					String msg = "";
+					msg += "Are you sure you want to delete ticket?";
+					msg += "\nId: " + MyCinemaSellerView.sellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex()).ticket_id;
+					msg += " for user: " + MyCinemaSellerView.sellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex()).ticket_user_id;
+					msg += " on steat: " + MyCinemaSellerView.sellerView.sellerView.ticketList.get(MyCinemaSellerView.sellerView.tickets_ticketList.getSelectedIndex()).ticket_seat_number;
+					int answer = JOptionPane.showConfirmDialog(null,msg , "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+					if(answer == JOptionPane.YES_OPTION)
 					{
-						MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
-						MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
-					}
-					else{
-						if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
+						MyCinemaSellerView.sellerView.myCinemaController.DeleteTicket(ticket_id);
+						//update
+						if(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex() != -1)
 						{
-							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList(MyCinemaSellerView.sellerView.tickets_showList.get(MyCinemaSellerView.sellerView.tickets_shows_showList.getSelectedIndex()).show_id);
 							MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
-						}else{
-							MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
-							MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+						}
+						else{
+							if(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex() != -1)
+							{
+								MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsListForMovie(MyCinemaSellerView.sellerView.tickets_shows_movieListArray.get(MyCinemaSellerView.sellerView.tickets_shows_movieListJList.getSelectedIndex()).movie_id);
+								MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+							}else{
+								MyCinemaSellerView.sellerView.ticketList = MyCinemaSellerView.sellerView.myCinemaController.GetTicketsList();
+								MyCinemaSellerView.sellerView.tickets_ticketList.setListData(MyCinemaController.TicketsRowListToArray(MyCinemaSellerView.sellerView.ticketList));
+							}
 						}
 					}
 					
@@ -1444,8 +1453,6 @@ public class MyCinemaSellerView extends CinemaContentPanel
 		jTabbedPane.add(tabChart);
 		
 		this.chart_panel = null;
-		//this.chart_panel.setBounds(10, 10, 775, 320);
-		//tabChart.add(chart_panel);
 		
 		JLabel chartLabel = new JLabel("Enter year");
 		chartLabel.setBounds(250, 340, 90, 20);
@@ -1480,8 +1487,6 @@ public class MyCinemaSellerView extends CinemaContentPanel
 					MyCinemaSellerView.sellerView.chart_panel = new LineChart(xs,"Months",ys,"","Financials",760,320,MyCinemaSellerView.sellerView.tabChart.getBackground().darker());
 					MyCinemaSellerView.sellerView.chart_panel.setBounds(10, 10, 760, 320);
 					MyCinemaSellerView.sellerView.tabChart.add(MyCinemaSellerView.sellerView.chart_panel);
-					//MyCinemaSellerView.sellerView.chart_panel.add(tmpPanel);
-					//MyCinemaSellerView.sellerView.chart_panel.setVisible(true);
 					MyCinemaSellerView.sellerView.tabChart.revalidate();
 				}else{
 					JOptionPane.showMessageDialog(null, "Enter valid year");
